@@ -62,10 +62,12 @@ window.I18N = {
 
     tz_eyebrow: 'Contacts',
     tz_title: 'Nos témoins',
-    tz_lead: 'Vous souhaitez faire un discours, présenter quelque chose ou préparer une surprise ? Merci de vous coordonner avec nos témoins.',
+    tz_lead: 'Vous souhaitez faire un discours ou préparer une surprise ? Nous en serions ravis. Afin que la soirée ne soit pas trop chargée, le nombre de discours sera limité. Merci donc de vous adresser suffisamment tôt à nos témoins : ils gardent une vue d’ensemble et coordonnent tout avec nous.',
     tz_aline: 'Témoin d’Aline',
     tz_joachim: 'Témoin de Joachim',
     band_alt: 'Aline et Joachim au bord d’un lac',
+    gal_1: 'Aline et Joachim main dans la main',
+    gal_3: 'Aline et Joachim riant au soleil',
 
     rsvp_eyebrow: 'Avant le 1er février 2027',
     rsvp_title: 'Votre réponse',
