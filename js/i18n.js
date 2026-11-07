@@ -76,7 +76,7 @@ window.I18N = {
 
     foot_date: '17 juillet 2027 · Göttingen',
     foot_post: 'Adresse',
-    foot_privacy: 'Vos réponses servent uniquement à l’organisation de notre mariage et seront supprimées ensuite. La carte charge des images d’OpenStreetMap et de CARTO.',
+    foot_privacy: 'Vos réponses servent uniquement à l’organisation de notre mariage et seront supprimées ensuite. La carte charge des images d’OpenStreetMap.',
   },
 
   js: {
