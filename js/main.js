@@ -202,7 +202,10 @@
   function zeichneKarte() {
     if (!window.L) return;
     if (!karte) {
-      karte = L.map('map', { scrollWheelZoom: true });
+      var touch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+      // Auf Handy/Tablet: Karte im Normalmodus nicht mit einem Finger verschieben, damit die Seite gut scrollt
+      karte = L.map('map', { scrollWheelZoom: true, dragging: !touch });
+      karte._touchModus = touch;
       vollbildKnopf();
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
@@ -266,6 +269,16 @@
       knopfEl.setAttribute('aria-label', txt);
       knopfEl.title = txt;
       knopfEl.setAttribute('aria-pressed', an ? 'true' : 'false');
+      if (hinweisEl) hinweisEl.textContent = lang === 'fr' ? '↔ Plein écran pour déplacer la carte' : '↔ Vollbild, um die Karte zu verschieben';
+    }
+    var hinweisEl = null;
+    if (karte._touchModus) {
+      hinweisEl = document.createElement('button');
+      hinweisEl.type = 'button';
+      hinweisEl.className = 'map-hinweis';
+      box.classList.add('mit-hinweis');
+      hinweisEl.addEventListener('click', function () { umschalten(); });
+      box.appendChild(hinweisEl);
     }
     var gemerkt = 0;
     function umschalten(aus) {
@@ -273,6 +286,7 @@
       if (an === box.classList.contains('is-full')) return;
       if (an) gemerkt = window.scrollY;
       box.classList.toggle('is-full', an);
+      if (karte._touchModus) { if (an) karte.dragging.enable(); else karte.dragging.disable(); }
       document.body.classList.toggle('map-open', an);
       if (!an) window.scrollTo({ top: gemerkt, behavior: 'instant' }); // zurück an dieselbe Stelle der Seite
       beschrifte();
