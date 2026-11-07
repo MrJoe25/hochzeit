@@ -98,6 +98,10 @@
     return '<label class="choice"><input type="radio" name="' + name + '" value="' + wert + '"' + (aktiv ? ' checked' : '') + (gesperrt ? ' disabled' : '') + '><span>' + esc(text) + '</span></label>';
   }
 
+  function box(name, text, aktiv, gesperrt) {
+    return '<label class="choice"><input type="checkbox" name="' + name + '"' + (aktiv ? ' checked' : '') + (gesperrt ? ' disabled' : '') + '><span>' + esc(text) + '</span></label>';
+  }
+
   function zeigeGruppe() {
     var m = aktuell.members;
     var zu = !aktuell.open;
@@ -122,6 +126,11 @@
           '</div>' +
           '<div class="field" style="margin-bottom: 8px"><label for="a' + i + '">' + esc(t('allergies')) + '</label>' +
           '<input type="text" id="a' + i + '" maxlength="300" placeholder="' + esc(t('allergies_ph')) + '" value="' + esc(a.allergien || '') + '"' + (zu ? ' disabled' : '') + '></div>' +
+          '<p class="label" style="margin: 6px 0 0">' + esc(t('shuttle_q')) + '</p>' +
+          '<div class="choices">' +
+            box('sh' + i, t('shuttle_hin'), a.shuttleHin, zu) +
+            box('sz' + i, t('shuttle_zurueck'), a.shuttleZurueck, zu) +
+          '</div>' +
         '</div>' +
       '</fieldset>';
     }).join('');
@@ -161,6 +170,8 @@
         zusage: z ? z.value : '',
         ernaehrung: e ? e.value : 'keine',
         allergien: a ? a.value.trim() : '',
+        shuttleHin: !!(fs.querySelector('input[name^="sh"]') || {}).checked,
+        shuttleZurueck: !!(fs.querySelector('input[name^="sz"]') || {}).checked,
       };
     });
     return res;
@@ -193,7 +204,7 @@
     var werte = sammle();
     var antworten = Object.keys(werte).map(function (id) {
       var w = werte[id];
-      return { id: id, zusage: w.zusage, ernaehrung: w.ernaehrung, allergien: w.allergien };
+      return { id: id, zusage: w.zusage, ernaehrung: w.ernaehrung, allergien: w.allergien, shuttleHin: w.shuttleHin, shuttleZurueck: w.shuttleZurueck };
     });
     if (antworten.some(function (a) { return !a.zusage; })) {
       meldung(gruppeMsg, 'err_missing', 'error');

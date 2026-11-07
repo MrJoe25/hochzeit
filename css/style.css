@@ -195,6 +195,8 @@ input[type="text"], input[type="password"] { font: inherit; font-size: 20px; pad
 .choice { position: relative; }
 .choice input { position: absolute; opacity: 0; width: 1px; height: 1px; }
 .choice span { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 18px; border: 1px solid #c9b48f; font-family: var(--sans); font-size: 14px; letter-spacing: 0.08em; cursor: pointer; background: #FBFAF6; }
+.choice input[type="checkbox"] + span::before { content: ''; width: 14px; height: 14px; border: 1.5px solid currentColor; margin-right: 10px; display: inline-block; }
+.choice input[type="checkbox"]:checked + span::before { content: '✓'; line-height: 14px; text-align: center; font-size: 12px; }
 .choice input:checked + span { background: var(--ink); color: var(--ivory); border-color: var(--ink); }
 .choice input:focus-visible + span { outline: 2px solid var(--gold-text); outline-offset: 2px; }
 .small { font-size: 17px; color: var(--ink-soft); }
