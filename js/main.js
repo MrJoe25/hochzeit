@@ -92,7 +92,10 @@
   function typ(o) { return String(o.typ || '').toLowerCase(); }
   function hinweis(o) { return lang === 'fr' ? (o.hinweisFr || '') : (o.hinweis || ''); }
   function zeit(o) { var z = String(o.uhrzeit || ''); return lang === 'fr' ? z.replace(/^ab\s+/i, t('ab') + ' ') : z; }
-  function route(o) { return 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(o.adresse || o.name); }
+  function route(o) {
+    var ziel = o.genau && o.lat && o.lng ? o.lat + ',' + o.lng : (o.adresse || o.name);
+    return 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(ziel);
+  }
   function link(o) {
     var l = String(o.link || '').trim();
     if (!l) return '';
