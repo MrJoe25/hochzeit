@@ -252,3 +252,27 @@ footer .names { margin: 0; font-family: var(--display); font-size: 26px; }
   .nav { position: static; }
   .panel { padding: 22px 18px; }
 }
+
+/* Menü: auf großen Bildschirmen wie bisher, auf dem Handy als Seitenmenü */
+.nav-panel { display: contents; }
+.menu-btn, .menu-zu { display: none; }
+@media (max-width: 700px) {
+  .nav { position: sticky; top: 0; flex-wrap: nowrap; padding: 8px 8px 8px 16px; gap: 12px; }
+  .brand { font-size: 22px; order: 1; }
+  .hero .place { font-size: 13px; letter-spacing: 0.28em; white-space: nowrap; }
+  .menu-btn { order: 2; display: flex; flex-direction: column; justify-content: center; gap: 5px; width: 48px; height: 48px; padding: 0 12px; margin-left: auto; background: transparent; border: 0; cursor: pointer; }
+  .menu-btn span { display: block; height: 1.5px; background: var(--ink); }
+  .nav-panel { display: flex; flex-direction: column; position: fixed; top: 0; right: 0; bottom: 0; width: min(82vw, 330px); z-index: 2100; background: var(--ivory); border-left: 2px solid var(--gold); padding: 64px 28px 28px; overflow-y: auto; transform: translateX(100%); visibility: hidden; transition: transform 0.28s ease, visibility 0s linear 0.28s; }
+  .nav.is-offen .nav-panel { transform: none; visibility: visible; transition: transform 0.28s ease; }
+  .menu-zu { display: block; position: absolute; top: 8px; right: 8px; width: 48px; height: 48px; background: transparent; border: 0; font-size: 34px; line-height: 1; color: var(--ink); cursor: pointer; }
+  .nav .nav-links { order: 0; flex: none; display: flex; flex-direction: column; flex-wrap: nowrap; gap: 0; font-size: 14px; letter-spacing: 0.16em; }
+  .nav .nav-links a { display: block; padding: 15px 0; border-bottom: 1px solid var(--gold-line); }
+  .nav .nav-links a.is-aktiv { box-shadow: none; }
+  .nav .nav-links a.is-aktiv::before { content: '· '; }
+  .nav .lang { order: 0; align-self: flex-start; margin-top: 28px; }
+  .nav-schatten { position: fixed; inset: 0; z-index: 1450; background: rgba(59, 47, 38, 0.35); }
+  .nav-schatten[hidden] { display: none; }
+  body.menu-offen { overflow: hidden; }
+  .nach-oben { display: none !important; }
+}
+@media (prefers-reduced-motion: reduce) { .nav-panel { transition: none !important; } }

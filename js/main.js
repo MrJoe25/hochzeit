@@ -372,3 +372,31 @@
   window.addEventListener('scroll', function () { if (!tick) { tick = true; requestAnimationFrame(aktualisieren); } }, { passive: true });
   aktualisieren();
 })();
+
+// ---------- Seitenmenü auf dem Handy ----------
+(function () {
+  'use strict';
+  var nav = document.querySelector('.nav');
+  var knopf = document.getElementById('menu-btn');
+  var zu = document.getElementById('menu-zu');
+  var schatten = document.getElementById('nav-schatten');
+  var panel = document.getElementById('nav-panel');
+  function setze(an, fokusZurueck) {
+    nav.classList.toggle('is-offen', an);
+    document.body.classList.toggle('menu-offen', an);
+    schatten.hidden = !an;
+    knopf.setAttribute('aria-expanded', an ? 'true' : 'false');
+    if (an) { var erster = panel.querySelector('.nav-links a'); setTimeout(function () { erster.focus(); }, 60); }
+    else if (fokusZurueck) knopf.focus();
+  }
+  knopf.addEventListener('click', function () { setze(!nav.classList.contains('is-offen')); });
+  zu.addEventListener('click', function () { setze(false, true); });
+  schatten.addEventListener('click', function () { setze(false, true); });
+  panel.querySelectorAll('.nav-links a').forEach(function (a) {
+    a.addEventListener('click', function () { if (nav.classList.contains('is-offen')) setze(false); });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && nav.classList.contains('is-offen')) setze(false, true);
+  });
+  window.matchMedia('(min-width: 701px)').addEventListener('change', function (m) { if (m.matches) setze(false); });
+})();

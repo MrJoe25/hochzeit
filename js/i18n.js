@@ -3,6 +3,8 @@
 window.I18N = {
   fr: {
     nav_label: 'Navigation',
+    menu_open: 'Ouvrir le menu',
+    menu_close: 'Fermer le menu',
     nav_programm: 'Programme',
     nav_orte: 'Lieux',
     nav_unterkunft: 'Hébergement',

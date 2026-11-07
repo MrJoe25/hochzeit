@@ -24,7 +24,7 @@
 <link rel="preload" href="fonts/playfair-display-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/cormorant-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
-<link rel="stylesheet" href="css/style.css?v=20261107x">
+<link rel="stylesheet" href="css/style.css?v=20261107z">
 </head>
 <body>
 <div class="page">
@@ -33,6 +33,9 @@
 
 <nav class="nav" aria-label="Navigation" data-i18n-aria="nav_label">
   <a class="brand" href="#start">Aline <span>&amp;</span> Joachim</a>
+  <button type="button" class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="nav-panel" aria-label="Menü öffnen" data-i18n-aria="menu_open"><span></span><span></span><span></span></button>
+  <div class="nav-panel" id="nav-panel">
+  <button type="button" class="menu-zu" id="menu-zu" aria-label="Menü schließen" data-i18n-aria="menu_close">×</button>
   <div class="nav-links">
     <a href="#programm" data-i18n="nav_programm">Programm</a>
     <a href="#orte" data-i18n="nav_orte">Orte</a>
@@ -47,7 +50,9 @@
     <button type="button" data-lang="de" aria-pressed="true" lang="de">DE</button>
     <button type="button" data-lang="fr" aria-pressed="false" lang="fr">FR</button>
   </div>
+  </div>
 </nav>
+<div class="nav-schatten" id="nav-schatten" hidden></div>
 
 <main>
 <header id="start" class="hero">
@@ -244,9 +249,9 @@
 </div>
 
 <script src="vendor/leaflet/leaflet.js"></script>
-<script src="js/config.js?v=20261107x"></script>
-<script src="js/i18n.js?v=20261107x"></script>
-<script src="js/main.js?v=20261107x"></script>
-<script src="js/rsvp.js?v=20261107x"></script>
+<script src="js/config.js?v=20261107z"></script>
+<script src="js/i18n.js?v=20261107z"></script>
+<script src="js/main.js?v=20261107z"></script>
+<script src="js/rsvp.js?v=20261107z"></script>
 </body>
 </html>
