@@ -74,6 +74,8 @@ window.I18N = {
     rsvp_lead: 'Indiquez votre nom et le mot de passe figurant sur l’invitation. Vous verrez alors toutes les personnes de votre invitation et pourrez répondre pour chacune.',
     rsvp_name: 'Prénom et nom',
     rsvp_pw: 'Mot de passe de l’invitation',
+    pw_show: 'Afficher',
+    pw_hide: 'Masquer',
     rsvp_find: 'Trouver l’invitation',
     rsvp_group: 'Votre invitation',
     rsvp_save: 'Envoyer la réponse',

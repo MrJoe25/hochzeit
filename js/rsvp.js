@@ -136,6 +136,23 @@
     return res;
   }
 
+  // Passwort anzeigen / verbergen
+  var pwToggle = document.getElementById('pw-toggle');
+  function pwBeschriften() {
+    var sichtbar = pwInput.type === 'text';
+    var fr = window.I18N.fr;
+    var k = sichtbar ? 'pw_hide' : 'pw_show';
+    pwToggle.setAttribute('data-i18n', k);
+    pwToggle.textContent = window.APP.lang() === 'fr' ? fr[k] : (sichtbar ? 'Verbergen' : 'Anzeigen');
+    pwToggle.setAttribute('aria-pressed', sichtbar ? 'true' : 'false');
+  }
+  pwToggle.addEventListener('click', function () {
+    pwInput.type = pwInput.type === 'password' ? 'text' : 'password';
+    pwBeschriften();
+    pwInput.focus();
+  });
+  window.APP.onLang(pwBeschriften);
+
   suche.addEventListener('submit', function (ev) {
     ev.preventDefault();
     suchen(nameInput.value);

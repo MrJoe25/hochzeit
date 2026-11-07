@@ -153,6 +153,10 @@ body.map-open { overflow: hidden; }
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
 .field label, .field legend { font-family: var(--sans); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-text); }
 input[type="text"], input[type="password"] { font: inherit; font-size: 20px; padding: 12px 14px; min-height: 48px; border: 1px solid #c9b48f; background: #FBFAF6; color: var(--ink); width: 100%; }
+.pw-wrap { position: relative; }
+.pw-wrap input { padding-right: 120px; }
+.pw-toggle { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); min-height: 40px; padding: 0 14px; background: transparent; border: 0; font-family: var(--sans); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold-text); cursor: pointer; }
+.pw-toggle:hover { color: var(--ink); }
 .msg { margin: 0 0 16px; padding: 12px 16px; border-left: 3px solid var(--gold); background: var(--sand); }
 .msg.error { border-left-color: #9a3b2a; }
 .msg.ok { border-left-color: #3f6b4f; }
