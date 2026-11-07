@@ -59,7 +59,7 @@ window.I18N = {
     nav_infos: 'Infos',
     faq_eyebrow: 'Questions et réponses',
     faq_title: 'Bon à savoir',
-    faq_q1: 'Qui est invité ?',
+    faq_q1: 'À qui s’adresse l’invitation ?',
     faq_a1: 'Notre invitation s’adresse aux personnes qui y sont nommées. Merci de votre compréhension : nous ne pouvons pas accueillir d’autres accompagnants.',
     faq_q2: 'Comment venir à Göttingen ?',
     faq_a2: '<p><strong>En train :</strong> Göttingen se trouve sur la ligne ICE entre Hambourg, Hanovre, Francfort et Munich. Comptez environ 35 minutes depuis Hanovre et deux heures à deux heures et demie depuis Francfort, Hambourg ou Berlin. Depuis Bruxelles, le trajet dure environ cinq à six heures avec un changement à Cologne ou à Francfort. Les hôtels proposés se trouvent juste à côté de la gare.</p><p><strong>En avion :</strong> les grands aéroports les plus proches sont Hanovre et Francfort. Continuez ensuite de préférence en train.</p><p><strong>En voiture :</strong> Göttingen se trouve directement sur l’autoroute A7, sorties Göttingen et Göttingen-Nord. Le jour du mariage, laissez de préférence la voiture à l’hôtel : notre navette s’occupe des trajets.</p>',
