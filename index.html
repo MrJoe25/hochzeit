@@ -24,7 +24,7 @@
 <link rel="preload" href="fonts/playfair-display-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/cormorant-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
-<link rel="stylesheet" href="css/style.css?v=20261107t">
+<link rel="stylesheet" href="css/style.css?v=20261107w">
 </head>
 <body>
 <div class="page">
@@ -201,12 +201,12 @@
     <div id="suche-msg" aria-live="polite"></div>
     <div class="field">
       <label for="rsvp-name" data-i18n="rsvp_name">Vor- und Nachname</label>
-      <input id="rsvp-name" name="name" type="text" autocomplete="name" required>
+      <input id="rsvp-name" name="name" type="text" autocomplete="name" autocapitalize="words" enterkeyhint="next" required>
     </div>
     <div class="field">
       <label for="rsvp-pw" data-i18n="rsvp_pw">Passwort von der Einladung</label>
       <div class="pw-wrap">
-        <input id="rsvp-pw" name="password" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" required>
+        <input id="rsvp-pw" name="password" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" required>
         <button type="button" class="pw-toggle" id="pw-toggle" aria-controls="rsvp-pw" aria-pressed="false" data-i18n="pw_show">Anzeigen</button>
       </div>
     </div>
@@ -220,9 +220,11 @@
     <div id="personen"></div>
     <button class="button" type="submit" data-i18n="rsvp_save">Antwort senden</button>
     <p class="small" style="margin: 16px 0 0" data-i18n="rsvp_change">Ihr könnt eure Antwort bis zum 1. Februar 2027 jederzeit ändern, indem ihr euren Namen erneut eingebt.</p>
+    <button type="button" class="link-btn" id="andere-einladung" data-i18n="rsvp_other">← Andere Einladung suchen</button>
   </form>
 </section>
 </main>
+<a href="#start" class="nach-oben" id="nach-oben" aria-label="Nach oben zum Menü" data-i18n-aria="to_top" hidden>↑</a>
 
 <footer>
   <p class="names">Aline &amp; Joachim</p>
@@ -240,9 +242,9 @@
 </div>
 
 <script src="vendor/leaflet/leaflet.js"></script>
-<script src="js/config.js?v=20261107t"></script>
-<script src="js/i18n.js?v=20261107t"></script>
-<script src="js/main.js?v=20261107t"></script>
-<script src="js/rsvp.js?v=20261107t"></script>
+<script src="js/config.js?v=20261107w"></script>
+<script src="js/i18n.js?v=20261107w"></script>
+<script src="js/main.js?v=20261107w"></script>
+<script src="js/rsvp.js?v=20261107w"></script>
 </body>
 </html>

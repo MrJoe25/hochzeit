@@ -323,3 +323,52 @@
   setzeSprache(startSprache());
   ladeOrte();
 })();
+
+// ---------- Führung: aktueller Abschnitt im Menü, Knopf nach oben, Sprungziele unter dem Menü ----------
+(function () {
+  'use strict';
+  var nav = document.querySelector('.nav');
+  var oben = document.getElementById('nach-oben');
+  var links = Array.prototype.slice.call(document.querySelectorAll('.nav-links a[href^="#"]'));
+  var abschnitte = links.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); }).filter(Boolean);
+
+  function navHoehe() {
+    var h = getComputedStyle(nav).position === 'sticky' ? nav.offsetHeight : 0;
+    document.documentElement.style.setProperty('--nav-h', h + 'px');
+    return h;
+  }
+  var nh = navHoehe();
+  window.addEventListener('resize', function () { nh = navHoehe(); });
+
+  var gewaehlt = null; // zuletzt im Menü angeklickt
+  links.forEach(function (a) { a.addEventListener('click', function () { gewaehlt = a.getAttribute('href').slice(1); }); });
+  var tick = false;
+  function aktualisieren() {
+    tick = false;
+    var y = window.scrollY;
+    // Knopf nach oben: erst nach etwas Scrollen, nicht über dem Antwortformular auf dem Handy
+    var rsvp = document.getElementById('rueckmeldung').getBoundingClientRect();
+    var imFormular = window.innerWidth <= 700 && rsvp.top < window.innerHeight && rsvp.bottom > 0;
+    var tippt = document.activeElement && /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName);
+    if (oben) oben.hidden = y < 700 || imFormular || tippt;
+    // Abschnitt, dessen Oberkante zuletzt unter dem Menü durchgelaufen ist
+    var aktiv = null, grenze = nh + window.innerHeight * 0.3;
+    var aktivOben = -Infinity;
+    abschnitte.forEach(function (s) {
+      var t = s.getBoundingClientRect().top; // nebeneinander liegende Abschnitte (Dresscode | Geschenke): den ersten nehmen
+      if (t <= grenze && t > aktivOben + 1) { aktiv = s; aktivOben = t; }
+    });
+    var g = gewaehlt && document.getElementById(gewaehlt);
+    if (g && aktiv && Math.abs(g.getBoundingClientRect().top - aktivOben) <= 1) aktiv = g;
+    if (window.innerHeight + y >= document.documentElement.scrollHeight - 4) aktiv = abschnitte[abschnitte.length - 1];
+    links.forEach(function (a) {
+      var an = aktiv && a.getAttribute('href') === '#' + aktiv.id;
+      a.classList.toggle('is-aktiv', !!an);
+      if (an) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+    });
+  }
+  document.addEventListener('focusin', function () { requestAnimationFrame(aktualisieren); });
+  document.addEventListener('focusout', function () { setTimeout(aktualisieren, 50); });
+  window.addEventListener('scroll', function () { if (!tick) { tick = true; requestAnimationFrame(aktualisieren); } }, { passive: true });
+  aktualisieren();
+})();

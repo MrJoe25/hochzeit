@@ -21,6 +21,12 @@
     });
   }
 
+  function zeige(el) {
+    var r = el.getBoundingClientRect();
+    var oben = (document.querySelector('.nav') && getComputedStyle(document.querySelector('.nav')).position === 'sticky') ? document.querySelector('.nav').offsetHeight : 0;
+    if (r.top < oben + 8 || r.bottom > window.innerHeight - 8) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
   function meldung(el, key, cls) {
     letzteMeldung = key ? { el: el, key: key, cls: cls } : null;
     el.innerHTML = key ? '<p class="msg ' + (cls || '') + '" role="' + (cls === 'error' ? 'alert' : 'status') + '">' + esc(t(key)) + '</p>' : '';
@@ -61,9 +67,9 @@
     meldung(sucheMsg, null);
     post({ action: 'lookup', name: name, password: pwInput.value })
       .then(function (res) {
-        if (!res.ok) return fehler(sucheMsg, res);
-        if (res.status === 'short') return meldung(sucheMsg, 'err_short', 'error');
-        if (res.status === 'none') return meldung(sucheMsg, 'err_none', 'error');
+        if (!res.ok) { fehler(sucheMsg, res); zeige(sucheMsg); if (res.error === 'password') pwInput.focus(); return; }
+        if (res.status === 'short') { meldung(sucheMsg, 'err_short', 'error'); zeige(sucheMsg); nameInput.focus(); return; }
+        if (res.status === 'none') { meldung(sucheMsg, 'err_none', 'error'); zeige(sucheMsg); return; }
         if (res.status === 'suggest') {
           meldung(sucheMsg, null);
           zeigeVorschlaege(res.suggestions);
@@ -75,7 +81,7 @@
           zeigeGruppe();
         }
       })
-      .catch(function () { meldung(sucheMsg, 'err_server', 'error'); })
+      .catch(function () { meldung(sucheMsg, 'err_server', 'error'); zeige(sucheMsg); })
       .then(function () { laedt(knopf, false); });
   }
 
@@ -138,14 +144,22 @@
       fs.querySelectorAll('input[name^="z"]').forEach(function (r) {
         r.addEventListener('change', function () {
           fs.querySelector('.diet').hidden = r.value !== 'ja';
+          fs.classList.remove('fehlt');
         });
       });
     });
     gruppeForm.querySelector('button[type="submit"]').hidden = zu;
     if (zu) meldung(gruppeMsg, 'closed_note');
     else if (!letzteMeldung || letzteMeldung.el !== gruppeMsg || letzteMeldung.key === 'already') zeigeHinweisBereits();
+    var neu = suche.hidden === false;
     suche.hidden = true;
     gruppeForm.hidden = false;
+    if (neu) {
+      var kopf = gruppeForm.querySelector('.label');
+      kopf.setAttribute('tabindex', '-1');
+      document.getElementById('rueckmeldung').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      kopf.focus({ preventScroll: true });
+    }
   }
 
   // Hinweis, wenn für diese Einladung schon geantwortet wurde
@@ -196,6 +210,8 @@
 
   suche.addEventListener('submit', function (ev) {
     ev.preventDefault();
+    if (nameInput.value.trim().split(/\s+/).length < 2) { meldung(sucheMsg, 'err_short', 'error'); zeige(sucheMsg); nameInput.focus(); return; }
+    if (!pwInput.value.trim()) { meldung(sucheMsg, 'err_pw_leer', 'error'); zeige(sucheMsg); pwInput.focus(); return; }
     suchen(nameInput.value);
   });
 
@@ -206,8 +222,14 @@
       var w = werte[id];
       return { id: id, zusage: w.zusage, ernaehrung: w.ernaehrung, allergien: w.allergien, shuttleHin: w.shuttleHin, shuttleZurueck: w.shuttleZurueck };
     });
+    personen.querySelectorAll('.person').forEach(function (fs) {
+      fs.classList.toggle('fehlt', !(werte[fs.getAttribute('data-id')] || {}).zusage);
+    });
     if (antworten.some(function (a) { return !a.zusage; })) {
       meldung(gruppeMsg, 'err_missing', 'error');
+      var erste = personen.querySelector('.person.fehlt');
+      erste.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      var r1 = erste.querySelector('input'); if (r1) r1.focus({ preventScroll: true });
       return;
     }
     var knopf = gruppeForm.querySelector('button[type="submit"]');
@@ -215,13 +237,25 @@
     meldung(gruppeMsg, null);
     post({ action: 'save', name: aktuell.name, password: aktuell.password, lang: window.APP.lang(), answers: antworten })
       .then(function (res) {
-        if (!res.ok) return fehler(gruppeMsg, res);
+        if (!res.ok) { fehler(gruppeMsg, res); zeige(gruppeMsg); return; }
         aktuell.members.forEach(function (p) { p.answer = werte[p.id]; });
         meldung(gruppeMsg, 'saved', 'ok');
         gruppeMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
       })
-      .catch(function () { meldung(gruppeMsg, 'err_server', 'error'); })
+      .catch(function () { meldung(gruppeMsg, 'err_server', 'error'); zeige(gruppeMsg); })
       .then(function () { laedt(knopf, false); });
+  });
+
+  document.getElementById('andere-einladung').addEventListener('click', function () {
+    aktuell = null;
+    meldung(gruppeMsg, null);
+    personen.innerHTML = '';
+    gruppeForm.hidden = true;
+    suche.hidden = false;
+    vorschlaege.innerHTML = '';
+    nameInput.value = '';
+    document.getElementById('rueckmeldung').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    nameInput.focus({ preventScroll: true });
   });
 
   window.APP.onLang(function () {
