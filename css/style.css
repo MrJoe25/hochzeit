@@ -105,6 +105,16 @@ h2 { margin: 10px 0 14px; text-align: center; font-family: var(--display); font-
 .leaflet-popup-content p { margin: 2px 0; }
 .leaflet-container a.textlink { color: var(--gold-text); }
 
+/* Karte im Vollbild */
+.map-full { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: #fff; color: var(--ink); border: 2px solid rgba(0,0,0,0.2); border-radius: 4px; cursor: pointer; padding: 0; }
+.map-full:hover { background: var(--sand); }
+.map-full .zu { display: none; }
+.map-box.is-full .map-full .auf { display: none; }
+.map-box.is-full .map-full .zu { display: inline; }
+.map-box.is-full { position: fixed; inset: 0; z-index: 3000; margin: 0; border: 0; padding: 0; }
+.map-box.is-full #map { min-height: 0; height: 100%; }
+body.map-open { overflow: hidden; }
+
 /* Hotels */
 .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
 .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }

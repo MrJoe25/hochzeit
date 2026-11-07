@@ -146,7 +146,8 @@
   function zeichneKarte() {
     if (!window.L) return;
     if (!karte) {
-      karte = L.map('map', { scrollWheelZoom: false });
+      karte = L.map('map', { scrollWheelZoom: true });
+      vollbildKnopf();
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -183,6 +184,45 @@
     karte.invalidateSize();
     if (letztePunkte.length) karte.fitBounds(letztePunkte, { padding: [40, 40], maxZoom: 15 });
   });
+
+  // ---------- Vollbild ----------
+  function vollbildKnopf() {
+    var box = document.querySelector('.map-box');
+    var Knopf = L.Control.extend({
+      options: { position: 'topright' },
+      onAdd: function () {
+        var b = L.DomUtil.create('button', 'map-full');
+        b.type = 'button';
+        b.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path class="auf" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><path class="zu" d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>';
+        L.DomEvent.disableClickPropagation(b);
+        L.DomEvent.on(b, 'click', function () { umschalten(); });
+        knopfEl = b;
+        beschrifte();
+        return b;
+      },
+    });
+    var knopfEl = null;
+    function beschrifte() {
+      if (!knopfEl) return;
+      var an = box.classList.contains('is-full');
+      var txt = lang === 'fr' ? (an ? 'Quitter le plein écran' : 'Plein écran') : (an ? 'Vollbild beenden' : 'Vollbild');
+      knopfEl.setAttribute('aria-label', txt);
+      knopfEl.title = txt;
+      knopfEl.setAttribute('aria-pressed', an ? 'true' : 'false');
+    }
+    function umschalten(aus) {
+      var an = aus ? false : !box.classList.contains('is-full');
+      box.classList.toggle('is-full', an);
+      document.body.classList.toggle('map-open', an);
+      beschrifte();
+      setTimeout(function () { karte.invalidateSize(); }, 50);
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && box.classList.contains('is-full')) umschalten(true);
+    });
+    window.APP.onLang(beschrifte);
+    new Knopf().addTo(karte);
+  }
 
   function zeichneAlles() { zeichneListen(); zeichneKarte(); }
 
