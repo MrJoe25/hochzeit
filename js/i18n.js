@@ -82,6 +82,7 @@ window.I18N = {
   js: {
     de: {
       route: 'Route starten',
+      route_kurz: 'Route',
       website: 'Website',
       ab: 'ab',
       shuttle: 'Shuttle',
@@ -111,6 +112,7 @@ window.I18N = {
     },
     fr: {
       route: 'Itinéraire',
+      route_kurz: 'Itinéraire',
       website: 'Site web',
       ab: 'dès',
       shuttle: 'Navette',

@@ -89,6 +89,7 @@
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
+  function key(o) { return String(o.punkt || '') + '|' + String(o.name || ''); }
   function typ(o) { return String(o.typ || '').toLowerCase(); }
   function hinweis(o) { return lang === 'fr' ? (o.hinweisFr || '') : (o.hinweis || ''); }
   function zeit(o) { var z = String(o.uhrzeit || ''); return lang === 'fr' ? z.replace(/^ab\s+/i, t('ab') + ' ') : z; }
@@ -109,21 +110,21 @@
       var kopf = esc(o.punkt) + (o.uhrzeit ? ' · ' + esc(zeit(o)) : '');
       if (typ(o) === 'shuttle') kopf = esc(o.punkt.charAt(0)) + ' · ' + esc(t('shuttle'));
       var text = typ(o) === 'shuttle' ? (hinweis(o) || t('shuttle_text')) : hinweis(o);
-      return '<div class="card"><p class="label">' + kopf + '</p>' +
-        '<p class="title">' + esc(o.name) + '</p>' +
+      return '<div class="card klickbar" data-ort="' + esc(key(o)) + '"><p class="label">' + kopf + '</p>' +
+        '<p class="title"><button type="button" class="ort-btn">' + esc(o.name) + '</button></p>' +
         '<p>' + esc(o.adresse) + '</p>' +
         (text ? '<p class="small" style="margin-top:6px">' + esc(text) + '</p>' : '') +
         '<a class="textlink" target="_blank" rel="noopener" href="' + esc(route(o)) + '">' + esc(t('route')) + ' →</a></div>';
     }).join('');
 
     document.getElementById('park-liste').innerHTML = orte.filter(function (o) { return typ(o) === 'parken'; }).map(function (o) {
-      return '<li><a target="_blank" rel="noopener" href="' + esc(route(o)) + '">' + esc(o.name) + '</a>, ' + esc(String(o.adresse || '').replace(/,\s*\d{5}.*$/, '')) + '</li>';
+      return '<li data-ort="' + esc(key(o)) + '"><button type="button" class="ort-btn ort-inline">' + esc(o.name) + '</button>, ' + esc(String(o.adresse || '').replace(/,\s*\d{5}.*$/, '')) + ' · <a target="_blank" rel="noopener" href="' + esc(route(o)) + '">' + esc(t('route_kurz')) + '</a></li>';
     }).join('');
 
     document.getElementById('hotel-liste').innerHTML = orte.filter(function (o) { return typ(o) === 'hotel'; }).map(function (o) {
       var l = link(o);
-      return '<div class="tile"><p class="label">' + esc(o.punkt) + '</p>' +
-        '<p class="title">' + esc(o.name) + '</p>' +
+      return '<div class="tile klickbar" data-ort="' + esc(key(o)) + '"><p class="label">' + esc(o.punkt) + '</p>' +
+        '<p class="title"><button type="button" class="ort-btn">' + esc(o.name) + '</button></p>' +
         '<p>' + esc(String(o.adresse || '').replace(/,\s*\d{5}.*$/, '')) + '</p>' +
         (hinweis(o) ? '<p class="small">' + esc(hinweis(o)) + '</p>' : '') +
         '<a class="textlink" target="_blank" rel="noopener" href="' + esc(route(o)) + '">' + esc(t('route')) + ' →</a>' +
@@ -133,7 +134,27 @@
   }
 
   // ---------- Karte ----------
-  var karte = null, ebene = null;
+  var karte = null, ebene = null, marker = {};
+
+  // Klick auf einen Ort in der Liste: Karte darauf zentrieren
+  function zeigeAufKarte(k) {
+    var m = marker[k];
+    if (!m || !karte) return;
+    var box = document.querySelector('.map-box');
+    var r = box.getBoundingClientRect();
+    var sichtbar = r.top >= 0 && r.top < window.innerHeight * 0.5;
+    var los = function () {
+      karte.flyTo(m.getLatLng(), Math.max(karte.getZoom(), 16), { duration: 0.8 });
+      karte.once('moveend', function () { m.openPopup(); });
+    };
+    if (sichtbar || box.classList.contains('is-full')) los();
+    else { box.scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(los, 450); }
+  }
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest('[data-ort]');
+    if (!el || e.target.closest('a')) return;
+    zeigeAufKarte(el.getAttribute('data-ort'));
+  });
 
   function pin(o) {
     var ty = typ(o);
@@ -155,6 +176,7 @@
       ebene = L.layerGroup().addTo(karte);
     }
     ebene.clearLayers();
+    marker = {};
     var belegt = {};
     var punkte = [];
     var reihenfolge = { parken: 0, hotel: 1, shuttle: 2, station: 3 };
@@ -162,16 +184,16 @@
       .sort(function (a, b) { return (reihenfolge[typ(a)] || 0) - (reihenfolge[typ(b)] || 0); })
       .forEach(function (o) {
         var lat = Number(o.lat), lng = Number(o.lng);
-        var key = lat.toFixed(4) + ',' + lng.toFixed(4);
-        if (belegt[key]) lng += 0.0005 * belegt[key]; // gleiche Adresse leicht versetzen
-        belegt[key] = (belegt[key] || 0) + 1;
+        var pos = lat.toFixed(4) + ',' + lng.toFixed(4);
+        if (belegt[pos]) lng += 0.0005 * belegt[pos]; // gleiche Adresse leicht versetzen
+        belegt[pos] = (belegt[pos] || 0) + 1;
         var text = typ(o) === 'shuttle' ? (hinweis(o) || t('shuttle_text')) : hinweis(o);
         var html = '<p class="popup-title">' + esc(o.name) + '</p>' +
           (o.uhrzeit ? '<p>' + esc(zeit(o)) + '</p>' : '') +
           '<p>' + esc(o.adresse) + '</p>' +
           (text ? '<p>' + esc(text) + '</p>' : '') +
           '<a class="textlink" target="_blank" rel="noopener" href="' + esc(route(o)) + '">' + esc(t('route')) + ' →</a>';
-        L.marker([lat, lng], { icon: pin(o), title: o.name, zIndexOffset: (reihenfolge[typ(o)] || 0) * 100, keyboard: true })
+        marker[key(o)] = L.marker([lat, lng], { icon: pin(o), title: o.name, zIndexOffset: (reihenfolge[typ(o)] || 0) * 100, keyboard: true })
           .bindPopup(html).addTo(ebene);
         if (typ(o) !== 'parken') punkte.push([lat, lng]);
       });
