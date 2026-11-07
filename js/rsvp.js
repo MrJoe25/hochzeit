@@ -26,6 +26,22 @@
     el.innerHTML = key ? '<p class="msg ' + (cls || '') + '" role="' + (cls === 'error' ? 'alert' : 'status') + '">' + esc(t(key)) + '</p>' : '';
   }
 
+  // Ladeanzeige im Knopf: Drehkreis und Text "Suche …" / "Wird gesendet …"
+  function laedt(knopf, an, key) {
+    if (an) {
+      knopf.dataset.text = knopf.innerHTML;
+      knopf.innerHTML = '<span class="spinner" aria-hidden="true"></span>' + esc(t(key));
+      knopf.classList.add('is-loading');
+      knopf.disabled = true;
+      knopf.setAttribute('aria-busy', 'true');
+    } else {
+      if (knopf.dataset.text != null) knopf.innerHTML = knopf.dataset.text;
+      knopf.classList.remove('is-loading');
+      knopf.disabled = false;
+      knopf.removeAttribute('aria-busy');
+    }
+  }
+
   function post(daten) {
     // text/plain vermeidet die CORS-Vorabfrage, die Apps Script nicht beantwortet
     return fetch(api, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(daten) })
@@ -40,9 +56,9 @@
   function suchen(name) {
     if (!api) { meldung(sucheMsg, 'err_noapi', 'error'); return; }
     var knopf = suche.querySelector('button[type="submit"]');
-    knopf.disabled = true;
+    laedt(knopf, true, 'searching');
     vorschlaege.innerHTML = '';
-    meldung(sucheMsg, 'searching');
+    meldung(sucheMsg, null);
     post({ action: 'lookup', name: name, password: pwInput.value })
       .then(function (res) {
         if (!res.ok) return fehler(sucheMsg, res);
@@ -60,7 +76,7 @@
         }
       })
       .catch(function () { meldung(sucheMsg, 'err_server', 'error'); })
-      .then(function () { knopf.disabled = false; });
+      .then(function () { laedt(knopf, false); });
   }
 
   function zeigeVorschlaege(liste) {
@@ -70,6 +86,7 @@
     vorschlaege.querySelectorAll('button').forEach(function (b) {
       b.addEventListener('click', function () {
         nameInput.value = b.getAttribute('data-name');
+        b.innerHTML = '<span class="spinner dunkel" aria-hidden="true"></span>' + esc(b.getAttribute('data-name'));
         suchen(nameInput.value);
       });
     });
@@ -170,8 +187,8 @@
       return;
     }
     var knopf = gruppeForm.querySelector('button[type="submit"]');
-    knopf.disabled = true;
-    meldung(gruppeMsg, 'saving');
+    laedt(knopf, true, 'saving');
+    meldung(gruppeMsg, null);
     post({ action: 'save', name: aktuell.name, password: aktuell.password, lang: window.APP.lang(), answers: antworten })
       .then(function (res) {
         if (!res.ok) return fehler(gruppeMsg, res);
@@ -180,7 +197,7 @@
         gruppeMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
       })
       .catch(function () { meldung(gruppeMsg, 'err_server', 'error'); })
-      .then(function () { knopf.disabled = false; });
+      .then(function () { laedt(knopf, false); });
   });
 
   window.APP.onLang(function () {
