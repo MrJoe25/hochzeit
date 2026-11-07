@@ -229,6 +229,8 @@ body.map-open .nach-oben { display: none; }
 .tag-btn::after { content: ''; position: absolute; inset: -12px -6px; }
 @media (max-width: 700px) { .tag-btn { font-size: 13px; padding: 3px 10px; } .nach-oben { right: 14px; bottom: 14px; } }
 
+.sprachen { margin: 10px 0 0; font-size: 17px; font-style: italic; color: var(--muted); }
+
 /* Fuß */
 footer { border-top: 1px solid var(--gold-line); padding: 44px 24px; text-align: center; }
 footer .names { margin: 0; font-family: var(--display); font-size: 26px; }
