@@ -1,6 +1,25 @@
 (function () {
   'use strict';
 
+  // Beim Laden und Neuladen immer oben starten, ohne #abschnitt in der Adresse
+  try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
+  if (location.hash) {
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+  }
+  window.scrollTo(0, 0);
+  window.addEventListener('load', function () { window.scrollTo(0, 0); });
+
+  // Interne Links scrollen weich, ohne die Adresse zu ändern
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var id = a.getAttribute('href').slice(1);
+    var ziel = id === 'start' || !id ? null : document.getElementById(id);
+    e.preventDefault();
+    if (ziel) ziel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    else window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
   // ---------- Sprache ----------
   var deTexte = {}; // deutsche Originaltexte aus index.html
   var lang = 'de';
