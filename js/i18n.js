@@ -130,6 +130,8 @@ window.I18N = {
       allergies_ph: 'z. B. Nüsse, Laktose',
       child: 'Kind',
       saved: 'Danke, eure Antwort ist angekommen.',
+      already: 'Ihr habt bereits geantwortet. Unten seht ihr eure bisherige Antwort und könnt sie bei Bedarf ändern.',
+      already_date: 'Ihr habt bereits am {datum} geantwortet. Unten seht ihr eure bisherige Antwort und könnt sie bei Bedarf ändern.',
       closed_note: 'Die Frist ist abgelaufen. Änderungen bitte direkt an uns.',
     },
     fr: {
@@ -160,6 +162,8 @@ window.I18N = {
       allergies_ph: 'p. ex. fruits à coque, lactose',
       child: 'Enfant',
       saved: 'Merci, votre réponse nous est bien parvenue.',
+      already: 'Vous avez déjà répondu. Votre réponse s’affiche ci-dessous et vous pouvez la modifier si besoin.',
+      already_date: 'Vous avez déjà répondu le {datum}. Votre réponse s’affiche ci-dessous et vous pouvez la modifier si besoin.',
       closed_note: 'Le délai est dépassé. Pour toute modification, écrivez-nous directement.',
     },
   },

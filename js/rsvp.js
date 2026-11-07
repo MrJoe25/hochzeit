@@ -133,9 +133,22 @@
       });
     });
     gruppeForm.querySelector('button[type="submit"]').hidden = zu;
-    if (zu) meldung(gruppeMsg, 'closed_note'); else if (!letzteMeldung || letzteMeldung.el !== gruppeMsg) meldung(gruppeMsg, null);
+    if (zu) meldung(gruppeMsg, 'closed_note');
+    else if (!letzteMeldung || letzteMeldung.el !== gruppeMsg || letzteMeldung.key === 'already') zeigeHinweisBereits();
     suche.hidden = true;
     gruppeForm.hidden = false;
+  }
+
+  // Hinweis, wenn für diese Einladung schon geantwortet wurde
+  function zeigeHinweisBereits() {
+    var beantwortet = aktuell.members.filter(function (p) { return p.answer && p.answer.zusage; });
+    if (!beantwortet.length) { meldung(gruppeMsg, null); return; }
+    var daten = beantwortet.map(function (p) { return p.answer.geaendert || ''; }).filter(String).sort(function (a, b) {
+      return a.split('.').reverse().join('') < b.split('.').reverse().join('') ? 1 : -1;
+    });
+    letzteMeldung = { el: gruppeMsg, key: 'already' };
+    var text = daten.length ? t('already_date').replace('{datum}', daten[0]) : t('already');
+    gruppeMsg.innerHTML = '<p class="msg" role="status">' + esc(text) + '</p>';
   }
 
   function sammle() {
@@ -202,6 +215,7 @@
 
   window.APP.onLang(function () {
     if (aktuell && !gruppeForm.hidden) zeigeGruppe();
-    if (letzteMeldung) meldung(letzteMeldung.el, letzteMeldung.key, letzteMeldung.cls);
+    if (letzteMeldung && letzteMeldung.key === 'already') zeigeHinweisBereits();
+    else if (letzteMeldung) meldung(letzteMeldung.el, letzteMeldung.key, letzteMeldung.cls);
   });
 })();
