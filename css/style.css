@@ -145,6 +145,21 @@ body.map-open { overflow: hidden; }
 .mono { font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
 .copy { margin-left: 8px; font-family: var(--sans); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; background: transparent; border: 1px solid var(--gold); color: var(--gold-text); padding: 6px 10px; min-height: 32px; cursor: pointer; }
 
+/* Kalender */
+.cal-links { margin: 18px 0 0; display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; gap: 4px 14px; }
+.cal-links .label { margin-right: 4px; }
+
+/* Gut zu wissen */
+.faq { border-top: 1px solid var(--gold-line); }
+.faq details { border-bottom: 1px solid var(--gold-line); }
+.faq summary { list-style: none; cursor: pointer; padding: 20px 44px 20px 0; position: relative; font-family: var(--display); font-size: 22px; line-height: 1.3; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: '+'; position: absolute; right: 6px; top: 50%; transform: translateY(-50%); font-family: var(--sans); font-size: 26px; color: var(--gold-text); }
+.faq details[open] summary::after { content: '−'; }
+.faq summary:hover { color: var(--gold-text); }
+.faq details > p, .faq details > div { margin: 0 0 22px; }
+.faq details > div p { margin: 0 0 12px; }
+
 /* Fotos */
 .gallery { max-width: 1120px; margin: 0 auto; padding: 0 28px 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
 .gallery figure { margin: 0; border: 1px solid var(--gold); padding: 8px; background: #fff; }
