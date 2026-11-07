@@ -41,6 +41,9 @@ window.I18N = {
     orte_title: 'Lieux et trajets',
     orte_lead: 'Göttingen est une petite ville où presque tout se fait à pied. Pour l’église, venez de préférence à pied ou en taxi. Ensuite, tout se fait en navette : vers le Kiessee, puis vers les hôtels après la fête.',
     map_label: 'Carte',
+    taxi_label: 'Taxi',
+    taxi_text: 'Depuis les hôtels près de la gare, comptez environ 20 à 25 minutes à pied jusqu’à l’église en traversant la jolie vieille ville de Göttingen, ou environ 5 minutes en taxi.',
+    taxi_uber: 'Uber est également disponible à Göttingen via l’application Uber.',
     park_label: 'P · En voiture ?',
     park_text: 'Nous vous conseillons de laisser la voiture à l’hôtel. Si vous venez tout de même en voiture, vous trouverez des places ici :',
 

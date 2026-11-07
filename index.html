@@ -16,7 +16,7 @@
 <link rel="preload" href="fonts/playfair-display-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/cormorant-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
-<link rel="stylesheet" href="css/style.css?v=20261107e">
+<link rel="stylesheet" href="css/style.css?v=20261107f">
 </head>
 <body>
 <div class="page">
@@ -80,6 +80,16 @@
       </div>
       <div class="map-side">
         <div id="orte-liste" class="map-side" style="gap: 18px"></div>
+        <div class="card">
+          <p class="label" data-i18n="taxi_label">Taxi</p>
+          <p class="small" style="margin-top:6px" data-i18n="taxi_text">Von den Hotels am Bahnhof sind es zur Kirche zu Fuß etwa 20 bis 25 Minuten durch die schöne Göttinger Altstadt, mit dem Taxi etwa 5 Minuten.</p>
+          <ul style="margin: 10px 0 0; padding-left: 1.1em">
+            <li>Hallo Taxi · <a href="tel:+4955134034">0551 34034</a></li>
+            <li>Puk Minicar · <a href="tel:+49551484848">0551 484848</a></li>
+            <li>Taxi-Zentrale · <a href="tel:+4955169300">0551 69300</a></li>
+            <li data-i18n="taxi_uber">Uber ist in Göttingen über die Uber-App verfügbar.</li>
+          </ul>
+        </div>
         <div class="card dashed">
           <p class="label" data-i18n="park_label">P · Mit dem Auto?</p>
           <p style="margin-top: 6px" data-i18n="park_text">Wir empfehlen, das Auto am Hotel stehen zu lassen. Wer trotzdem fährt, findet hier Parkplätze:</p>
@@ -180,9 +190,9 @@
 </div>
 
 <script src="vendor/leaflet/leaflet.js"></script>
-<script src="js/config.js?v=20261107e"></script>
-<script src="js/i18n.js?v=20261107e"></script>
-<script src="js/main.js?v=20261107e"></script>
-<script src="js/rsvp.js?v=20261107e"></script>
+<script src="js/config.js?v=20261107f"></script>
+<script src="js/i18n.js?v=20261107f"></script>
+<script src="js/main.js?v=20261107f"></script>
+<script src="js/rsvp.js?v=20261107f"></script>
 </body>
 </html>
