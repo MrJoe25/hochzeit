@@ -85,6 +85,8 @@ h2 { margin: 10px 0 14px; text-align: center; font-family: var(--display); font-
 .timeline li { display: flex; flex-wrap: wrap; gap: 4px 28px; padding: 22px 0; border-bottom: 1px solid var(--gold-line); }
 .timeline .time { flex: 0 0 160px; font-family: var(--display); font-size: 24px; color: var(--gold-text); }
 .timeline .what { flex: 1 1 340px; }
+.tag-btn { background: transparent; cursor: pointer; font-family: var(--sans); line-height: 1.6; }
+.tag-btn:hover { background: var(--gold-text); color: #fff; border-color: var(--gold-text); }
 .timeline strong { font-weight: 600; }
 .tag { display: inline-block; margin-left: 6px; font-family: var(--sans); font-size: 12px; border: 1px solid var(--gold); padding: 1px 8px; color: var(--gold-text); vertical-align: 2px; }
 

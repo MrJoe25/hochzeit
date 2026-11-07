@@ -53,7 +53,7 @@ window.I18N = {
 
     dress_eyebrow: 'Tenue',
     dress_title: 'Dress code',
-    dress_text: 'Nous vous invitons à porter une tenue de jour festive : <strong>jaquette ou costume sombre</strong> pour ces messieurs, une robe élégante pour ces dames.',
+    dress_text: 'Nous vous invitons à porter une tenue de jour festive : <strong>jaquette ou costume sombre</strong> pour ces messieurs, <strong>une robe élégante</strong> pour ces dames.',
     cal_btn: 'Ajouter au calendrier',
     cal_google: 'ou dans Google Agenda',
     nav_infos: 'Infos',

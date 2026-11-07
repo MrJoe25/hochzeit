@@ -12,9 +12,10 @@
   // Interne Links scrollen weich, ohne die Adresse zu ändern
   document.addEventListener('click', function (e) {
     var a = e.target.closest('a[href^="#"]');
-    if (!a) return;
+    if (!a || a.closest('.leaflet-container')) return; // Kartenknöpfe (z. B. Schließen-X) nicht anfassen
     var id = a.getAttribute('href').slice(1);
     var ziel = id === 'start' || !id ? null : document.getElementById(id);
+    if (id && id !== 'start' && !ziel) return;
     e.preventDefault();
     if (ziel) ziel.scrollIntoView({ behavior: 'smooth', block: 'start' });
     else window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -179,6 +180,12 @@
     else { box.scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(los, 450); }
   }
   document.addEventListener('click', function (e) {
+    var p = e.target.closest('[data-punkt]');
+    if (p) {
+      var k = Object.keys(marker).filter(function (x) { return x.split('|')[0] === p.getAttribute('data-punkt'); })[0];
+      if (k) zeigeAufKarte(k);
+      return;
+    }
     var el = e.target.closest('[data-ort]');
     if (!el || e.target.closest('a')) return;
     zeigeAufKarte(el.getAttribute('data-ort'));
