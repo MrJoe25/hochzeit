@@ -72,7 +72,7 @@ h2 { margin: 10px 0 14px; text-align: center; font-family: var(--display); font-
 .hero { padding: 72px 24px 56px; text-align: center; }
 .hero .kicker { margin: 0; font-family: var(--display); font-size: 18px; letter-spacing: 0.5em; color: var(--gold-text); text-transform: uppercase; }
 .hero h1 { margin: 22px 0 6px; font-family: var(--display); font-weight: 400; font-size: clamp(46px, 7vw, 92px); line-height: 1.05; }
-.hero h1 em { font-family: var(--serif); color: var(--gold-text); }
+.hero h1 em { font-family: var(--display); font-style: normal; color: var(--gold-text); }
 .hero .date { margin: 26px 0 0; font-family: var(--display); font-size: clamp(30px, 3.6vw, 44px); }
 .hero .place { margin: 6px 0 0; font-family: var(--sans); font-size: 15px; letter-spacing: 0.42em; text-transform: uppercase; color: var(--gold-text); }
 .hero .photo { max-width: 1040px; margin: 48px auto 0; border: 1px solid var(--gold); padding: 10px; background: #fff; }
@@ -208,7 +208,7 @@ input[type="text"], input[type="password"] { font: inherit; font-size: 20px; pad
 .map-box.is-full .map-hinweis { display: none; }
 
 /* Navigation: Name und Sprache in einer Zeile, Menü darunter */
-@media (max-width: 1240px) {
+@media (max-width: 1360px) {
   .nav { gap: 0 16px; }
   .brand { order: 1; }
   .lang { order: 2; }
@@ -230,6 +230,8 @@ body.map-open .nach-oben { display: none; }
 @media (max-width: 700px) { .tag-btn { font-size: 13px; padding: 3px 10px; } .nach-oben { right: 14px; bottom: 14px; } }
 
 .sprachen { margin: 10px 0 0; font-size: 17px; font-style: italic; color: var(--muted); }
+
+@media (max-width: 700px) { .hero .date .wtag { display: block; } }
 
 /* Fuß */
 footer { border-top: 1px solid var(--gold-line); padding: 44px 24px; text-align: center; }

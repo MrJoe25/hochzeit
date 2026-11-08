@@ -14,8 +14,8 @@ window.I18N = {
     nav_zusage: 'Réponse',
 
     hero_kicker: 'Nous nous marions',
-    hero_date: '17 juillet 2027',
-    hero_place: 'Samedi · Göttingen',
+    hero_date: '<span class="wtag">Samedi</span> 17 juillet 2027',
+    hero_place: 'Göttingen',
     hero_alt: 'Aline et Joachim',
     hero_welcome: 'Nous serions très heureux de célébrer ce jour avec vous. Vous trouverez ici tout ce qu’il faut savoir pour le 17 juillet. Nous tiendrons cette page à jour jusqu’au mariage.',
     hero_button: 'Répondre avant le 1er février 2027',
@@ -55,7 +55,7 @@ window.I18N = {
 
     dress_eyebrow: 'Tenue',
     dress_title: 'Dress code',
-    dress_text: 'Nous vous invitons à porter une tenue de jour festive : <strong>jaquette ou costume sombre</strong> pour ces messieurs, <strong>une robe élégante</strong> pour ces dames.',
+    dress_text: 'Nous vous invitons à porter une tenue de jour festive : <strong>jaquette ou costume</strong> pour ces messieurs, <strong>une robe élégante</strong> pour ces dames.',
     cal_btn: 'Ajouter au calendrier',
     cal_google: 'ou dans Google Agenda',
     nav_infos: 'Infos',
