@@ -82,7 +82,7 @@ window.I18N = {
     tz_lead: 'Vous souhaitez faire un discours ou préparer une surprise ? Nous en serions ravis. Afin que la soirée ne soit pas trop chargée, le nombre de discours sera limité. Merci donc de vous adresser suffisamment tôt à nos témoins : ils gardent une vue d’ensemble et coordonnent tout avec nous.',
     tz_aline: 'Témoin d’Aline',
     tz_joachim: 'Témoin de Joachim',
-    tz_sprachen_amelie: 'Parle allemand et anglais',
+    tz_sprachen_amelie: 'Parle allemand, anglais et néerlandais',
     tz_sprachen_justin: 'Parle allemand, anglais et français',
     band_alt: 'Aline et Joachim au bord d’un lac',
     gal_1: 'Aline et Joachim main dans la main',
