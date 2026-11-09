@@ -157,7 +157,7 @@
     if (neu) {
       var kopf = gruppeForm.querySelector('.label');
       kopf.setAttribute('tabindex', '-1');
-      document.getElementById('rueckmeldung').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.APP.springeZu(document.getElementById('rueckmeldung'));
       kopf.focus({ preventScroll: true });
     }
   }
@@ -254,7 +254,7 @@
     suche.hidden = false;
     vorschlaege.innerHTML = '';
     nameInput.value = '';
-    document.getElementById('rueckmeldung').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    window.APP.springeZu(document.getElementById('rueckmeldung'));
     nameInput.focus({ preventScroll: true });
   });
 

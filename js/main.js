@@ -7,7 +7,43 @@
     try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
   }
   window.scrollTo(0, 0);
-  window.addEventListener('load', function () { window.scrollTo(0, 0); });
+  var angefasst = false; // hat der Gast schon selbst gescrollt oder geklickt?
+  ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (t) {
+    window.addEventListener(t, function () { angefasst = true; }, { passive: true, once: true });
+  });
+  window.addEventListener('load', function () { if (!angefasst) window.scrollTo(0, 0); });
+
+  // Zu einem Abschnitt springen und so lange nachkorrigieren, bis er wirklich oben steht.
+  // (Nachladende Inhalte wie Hotels, Karte oder Schriften verschieben sonst das Ziel.)
+  var lauf = 0;
+  function zielY(el) {
+    var nav = document.querySelector('.nav');
+    var navH = nav && getComputedStyle(nav).position === 'sticky' ? nav.offsetHeight : 0;
+    return Math.max(0, Math.round(el.getBoundingClientRect().top + window.scrollY - navH - 8));
+  }
+  function springeZu(el) {
+    var meinLauf = ++lauf;
+    var abbruch = false;
+    function stopp() { abbruch = true; }
+    window.addEventListener('wheel', stopp, { passive: true, once: true });
+    window.addEventListener('touchmove', stopp, { passive: true, once: true });
+    window.scrollTo({ top: el ? zielY(el) : 0, behavior: 'smooth' });
+    if (!el) return;
+    var start = Date.now(), ruhig = 0, letztesY = -1;
+    (function pruefe() {
+      if (abbruch || meinLauf !== lauf) return;
+      var y = window.scrollY, soll = zielY(el);
+      var maxY = document.documentElement.scrollHeight - window.innerHeight;
+      if (y === letztesY) ruhig++; else ruhig = 0;
+      letztesY = y;
+      // Scrollen steht still, aber nicht am Ziel: nachkorrigieren
+      if (ruhig >= 3 && Math.abs(y - Math.min(soll, maxY)) > 2) {
+        window.scrollTo({ top: soll, behavior: Math.abs(y - soll) > 300 ? 'smooth' : 'auto' });
+        ruhig = 0;
+      }
+      if (Date.now() - start < 2500) setTimeout(pruefe, 80);
+    })();
+  }
 
   // Interne Links scrollen weich, ohne die Adresse zu ändern
   document.addEventListener('click', function (e) {
@@ -17,8 +53,7 @@
     var ziel = id === 'start' || !id ? null : document.getElementById(id);
     if (id && id !== 'start' && !ziel) return;
     e.preventDefault();
-    if (ziel) ziel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    else window.scrollTo({ top: 0, behavior: 'smooth' });
+    springeZu(ziel);
   });
 
   // ---------- Sprache ----------
@@ -79,6 +114,7 @@
   }
 
   window.APP = {
+    springeZu: springeZu,
     t: t,
     lang: function () { return lang; },
     onLang: function (fn) { listeners.push(fn); },
