@@ -48,7 +48,7 @@ window.I18N = {
     taxi_text: 'Depuis les hôtels près de la gare, comptez environ 20 à 25 minutes à pied jusqu’à l’église en traversant la jolie vieille ville de Göttingen, ou environ 5 minutes en taxi.',
     taxi_uber: 'Uber est également disponible à Göttingen via l’application Uber.',
     park_label: 'P · En voiture ?',
-    park_text: 'Nous vous conseillons de laisser la voiture à l’hôtel. Il est difficile de se garer près du Kredo : le parking juste à côté est très petit et vite complet. Le parking du Jahnstadion offre davantage de places, à environ 10 minutes à pied du Kredo.',
+    park_text: 'Nous vous conseillons de laisser la voiture à l’hôtel. Il est difficile de se garer près du Kredo : le parking juste à côté est très petit et vite complet. Le parking du Jahnstadion offre davantage de places, à environ 15 minutes à pied du Kredo.',
 
     hotel_eyebrow: 'Où dormir',
     hotel_title: 'Hébergement',

@@ -10,15 +10,22 @@ DTSTART:20270717T120000Z
 DTEND:20270718T000000Z
 SUMMARY:Hochzeit Aline & Joachim
 LOCATION:St. Albani Kirche\, Albanikirchhof 1A\, 37073 Göttingen
+GEO:51.53372;9.94117
 DESCRIPTION:Programm\n14:00 Kirchliche Trauung\, St. Albani Kirche\, Albani
- kirchhof 1A\, 37073 Göttingen\n15:00 Fotos und Beisammensein vor der Kirc
- he\nca. 15:30 Shuttle zum Kiessee\, Abfahrt Albaniplatz (in mehreren Fahrt
- en)\n16:00 Empfang im Biergarten\, Kredo am Kiessee\, Sandweg 9a\, 37083 G
- öttingen (das Brautpaar kommt gegen 16:30 dazu)\n18:00 Abendessen\n21:00 
- Tanz und Feier bis 2 Uhr\, danach Shuttle zu den Hotels\n\nDresscode: Cuta
- way oder Anzug für die Herren\, festliche Kleidung für die Damen.\n\nAll
- e Infos und Zu- oder Absage bis 15. April 2027:\nhttps://mrjoe25.github.io
- /hochzeit/
+ kirchhof 1A\, 37073 Göttingen\nRoute: https://www.google.com/maps/dir/?ap
+ i=1&destination=51.53372%2C9.94117\n15:00 Fotos und Beisammensein vor der 
+ Kirche\nca. 15:30 Shuttle zum Kiessee\, Abfahrt Albaniplatz (in mehreren F
+ ahrten)\nRoute: https://www.google.com/maps/dir/?api=1&destination=51.5340
+ 2%2C9.94175\n16:00 Empfang im Biergarten\, Kredo am Kiessee\, Sandweg 9a\,
+  37083 Göttingen (das Brautpaar kommt gegen 16:30 dazu)\nRoute: https://w
+ ww.google.com/maps/dir/?api=1&destination=51.51993%2C9.92011\n18:00 Abende
+ ssen\n21:00 Tanz und Feier bis 2 Uhr\, danach Shuttle zu den Hotels\n\nMit
+  dem Auto: Am Kredo gibt es kaum Parkplätze. Parkplatz Jahnstadion\, Sand
+ weg 5\, ca. 15 Min. zu Fuß zum Kredo\nRoute: https://www.google.com/maps/
+ dir/?api=1&destination=51.51994%2C9.92864\n\nDresscode: Cutaway oder Anzug
+  für die Herren\, festliche Kleidung für die Damen.\n\nWebsite mit allen
+  Infos: https://mrjoe25.github.io/hochzeit/\nPasswort: steht auf eurer Ein
+ ladung\nZu- oder Absage bis 15. April 2027
 URL:https://mrjoe25.github.io/hochzeit/
 BEGIN:VALARM
 ACTION:DISPLAY

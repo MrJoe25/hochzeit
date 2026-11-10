@@ -10,15 +10,23 @@ DTSTART:20270717T120000Z
 DTEND:20270718T000000Z
 SUMMARY:Mariage Aline & Joachim
 LOCATION:Église St. Albani\, Albanikirchhof 1A\, 37073 Göttingen
-DESCRIPTION:Programme\n14h00 Cérémonie religieuse\, église St. Albani\, 
- Albanikirchhof 1A\, 37073 Göttingen\n15h00 Photos et moments partagés de
- vant l’église\nvers 15:30 navette vers le Kiessee\, départ Albaniplatz
-  (en plusieurs rotations)\n16:00 Vin d’honneur au jardin\, Kredo am Kies
- see\, Sandweg 9a\, 37083 Göttingen (les mariés vous rejoignent vers 16h3
- 0)\n18h00 Dîner\n21h00 Soirée dansante jusqu’à 2 heures\, puis navett
- e vers les hôtels\n\nTenue souhaitée : jaquette ou costume pour les mess
- ieurs\, tenue festive pour les dames.\n\nToutes les informations\, répons
- e souhaitée avant le 15 avril 2027 :\nhttps://mrjoe25.github.io/hochzeit/
+GEO:51.53372;9.94117
+DESCRIPTION:Programme\n14:00 Cérémonie religieuse\, église St. Albani\, 
+ Albanikirchhof 1A\, 37073 Göttingen\nItinéraire : https://www.google.com
+ /maps/dir/?api=1&destination=51.53372%2C9.94117\n15:00 Photos et moments p
+ artagés devant l’église\nvers 15:30 navette vers le Kiessee\, départ 
+ Albaniplatz (en plusieurs rotations)\nItinéraire : https://www.google.com
+ /maps/dir/?api=1&destination=51.53402%2C9.94175\n16:00 Vin d’honneur au 
+ jardin\, Kredo am Kiessee\, Sandweg 9a\, 37083 Göttingen (les mariés vou
+ s rejoignent vers 16h30)\nItinéraire : https://www.google.com/maps/dir/?a
+ pi=1&destination=51.51993%2C9.92011\n18:00 Dîner\n21:00 Soirée dansante 
+ jusqu’à 2 heures\, puis navette vers les hôtels\n\nEn voiture : peu de
+  places près du Kredo. Parking du Jahnstadion\, Sandweg 5\, env. 15 min 
+ à pied jusqu’au Kredo\nItinéraire : https://www.google.com/maps/dir/?a
+ pi=1&destination=51.51994%2C9.92864\n\nTenue souhaitée : jaquette ou cost
+ ume pour les messieurs\, tenue festive pour les dames.\n\nSite avec toutes
+  les informations : https://mrjoe25.github.io/hochzeit/\nMot de passe : in
+ diqué sur votre invitation\nRéponse souhaitée avant le 15 avril 2027
 URL:https://mrjoe25.github.io/hochzeit/
 BEGIN:VALARM
 ACTION:DISPLAY
