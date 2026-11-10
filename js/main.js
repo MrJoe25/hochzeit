@@ -170,9 +170,9 @@
   var ERSATZ = [
     { punkt: '1', typ: 'Station', name: 'St. Albani Kirche', adresse: 'Albanikirchhof 9, 37073 Göttingen', uhrzeit: '14:00', hinweis: 'Kirchliche Trauung, danach Fotos und Beisammensein vor der Kirche', hinweisFr: 'Cérémonie religieuse, puis photos et moments partagés devant l’église', lat: 51.5337, lng: 9.9411 },
     { punkt: '2', typ: 'Station', name: 'Kredo am Kiessee', adresse: 'Sandweg 9a, 37083 Göttingen', uhrzeit: 'ab 16:00', hinweis: 'Empfang im Biergarten, Abendessen und Feier', hinweisFr: 'Vin d’honneur au jardin, dîner et soirée', lat: 51.51993, lng: 9.92011 },
-    { punkt: 'P1', typ: 'Parken', name: 'Parken an der Kirche', adresse: 'Albanipl. 1, 37073 Göttingen', hinweis: 'Ca. 1,50 € pro Stunde, samstags bis 17 Uhr, danach kostenlos.', hinweisFr: 'Env. 1,50 € de l’heure, payant le samedi jusqu’à 17 h, gratuit ensuite.', lat: 51.5334, lng: 9.9398 },
+    { punkt: 'P1', typ: 'Parken', name: 'Parken an der Kirche', adresse: 'Albanipl. 1, 37073 Göttingen', lat: 51.5334, lng: 9.9398 },
     { punkt: 'P2', typ: 'Parken', name: 'Parkplatz am Kiessee', adresse: 'Sandweg 15, 37083 Göttingen', hinweis: 'Direkt am Kredo, aber sehr klein und schnell voll.', hinweisFr: 'Juste à côté du Kredo, mais très petit et vite complet.', lat: 51.51914, lng: 9.91939 },
-    { punkt: 'P3', typ: 'Parken', name: 'Parkplatz Jahnstadion', adresse: 'Sandweg 5, 37083 Göttingen', hinweis: 'Mehr Plätze, ca. 15 Min. zu Fuß zum Kredo. Erste Stunde frei, danach ca. 1 € pro Stunde.', hinweisFr: 'Davantage de places, env. 15 min à pied jusqu’au Kredo. Première heure gratuite, puis env. 1 € de l’heure.', lat: 51.51994, lng: 9.92864 },
+    { punkt: 'P3', typ: 'Parken', name: 'Parkplatz Jahnstadion', adresse: 'Sandweg 5, 37083 Göttingen', hinweis: 'Mehr Plätze, ca. 15 Min. zu Fuß zum Kredo.', hinweisFr: 'Davantage de places, env. 15 min à pied jusqu’au Kredo.', lat: 51.51994, lng: 9.92864 },
     { punkt: 'S1', typ: 'Shuttle', name: 'Shuttle Abfahrt', adresse: 'Albanipl. 1, 37073 Göttingen', lat: 51.5334, lng: 9.9398 },
     { punkt: 'H1', typ: 'Hotel', name: 'Hotel FREIgeist Göttingen Innenstadt', adresse: 'Berliner Str. 30, 37073 Göttingen', lat: 51.5370, lng: 9.9395 },
     { punkt: 'H2', typ: 'Hotel', name: 'Gebhards Hotel', adresse: 'Goethe-Allee 22-23, 37073 Göttingen', lat: 51.5352, lng: 9.9290 },
