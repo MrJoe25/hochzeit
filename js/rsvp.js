@@ -78,6 +78,7 @@
         if (res.status === 'group') {
           meldung(sucheMsg, null);
           aktuell = { name: res.name, password: pwInput.value, members: res.members, open: res.open };
+          window.APP.kalenderPasswort(pwInput.value);
           zeigeGruppe();
         }
       })
@@ -240,6 +241,7 @@
         if (!res.ok) { fehler(gruppeMsg, res); zeige(gruppeMsg); return; }
         aktuell.members.forEach(function (p) { p.answer = werte[p.id]; });
         meldung(gruppeMsg, 'saved', 'ok');
+        document.getElementById('rsvp-cal').hidden = !antworten.some(function (x) { return x.zusage === 'ja'; });
         gruppeMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
       })
       .catch(function () { meldung(gruppeMsg, 'err_server', 'error'); zeige(gruppeMsg); })
@@ -251,6 +253,7 @@
     meldung(gruppeMsg, null);
     personen.innerHTML = '';
     gruppeForm.hidden = true;
+    document.getElementById('rsvp-cal').hidden = true;
     suche.hidden = false;
     vorschlaege.innerHTML = '';
     nameInput.value = '';

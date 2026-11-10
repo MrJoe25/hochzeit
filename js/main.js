@@ -103,18 +103,50 @@
       b.setAttribute('aria-pressed', b.getAttribute('data-lang') === neu ? 'true' : 'false');
     });
     document.title = neu === 'fr' ? 'Aline & Joachim · 17 juillet 2027' : 'Aline & Joachim · 17. Juli 2027';
-    document.querySelectorAll('.cal-ics').forEach(function (a) {
-      // Android: Google Kalender direkt, sonst .ics (iPhone, Mac, Outlook)
-      if (istAndroid) { a.href = GCAL[neu] || GCAL.de; a.removeAttribute('download'); a.target = '_blank'; a.rel = 'noopener'; }
-      else a.href = 'kalender/hochzeit-aline-joachim-' + neu + '.ics';
-    });
-    document.querySelectorAll('.cal-g').forEach(function (a) { a.href = GCAL[neu] || GCAL.de; });
+    kalenderLinks(neu);
     speichern('hochzeit-lang', neu);
     listeners.forEach(function (fn) { fn(neu); });
   }
 
+  // Kalender: Das Passwort steht nur in Einträgen von Gästen, die es auf der Website schon richtig eingegeben haben.
+  // Die öffentlichen Dateien enthalten nur den Hinweis auf die Einladung.
+  var kalPw = null, icsBlob = {};
+  var PW_HINWEIS = { de: 'Passwort: steht auf eurer Einladung', fr: 'Mot de passe : indiqué sur votre invitation' };
+  var PW_TEXT = { de: 'Passwort: ', fr: 'Mot de passe : ' };
+  function gcalLink(l) {
+    var g = GCAL[l] || GCAL.de;
+    return kalPw ? g.replace(encodeURIComponent(PW_HINWEIS[l]), encodeURIComponent(PW_TEXT[l] + kalPw)) : g;
+  }
+  function kalenderLinks(l) {
+    document.querySelectorAll('.cal-ics').forEach(function (a) {
+      // Android: Google Kalender direkt, sonst .ics (iPhone, Mac, Outlook)
+      if (istAndroid) { a.href = gcalLink(l); a.removeAttribute('download'); a.target = '_blank'; a.rel = 'noopener'; }
+      else if (kalPw && icsBlob[l]) { a.href = icsBlob[l]; a.setAttribute('download', 'hochzeit-aline-joachim.ics'); }
+      else { a.href = 'kalender/hochzeit-aline-joachim-' + l + '.ics'; a.setAttribute('download', ''); }
+    });
+    document.querySelectorAll('.cal-g').forEach(function (a) { a.href = gcalLink(l); });
+  }
+  function kalenderPasswort(pw) {
+    pw = String(pw || '').trim();
+    if (!pw || pw === kalPw) return;
+    kalPw = pw;
+    kalenderLinks(lang);
+    if (istAndroid || !window.fetch || !window.Blob || !window.URL) return;
+    ['de', 'fr'].forEach(function (l) {
+      fetch('kalender/hochzeit-aline-joachim-' + l + '.ics').then(function (r) { return r.text(); }).then(function (txt) {
+        var ics = txt.replace(/\r\n[ \t]/g, '');
+        var sicher = pw.replace(/\\/g, '\\\\').replace(/,/g, '\\,').replace(/;/g, '\\;');
+        ics = ics.replace(PW_HINWEIS[l], PW_TEXT[l] + sicher);
+        if (icsBlob[l]) URL.revokeObjectURL(icsBlob[l]);
+        icsBlob[l] = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
+        kalenderLinks(lang);
+      }).catch(function () {});
+    });
+  }
+
   window.APP = {
     springeZu: springeZu,
+    kalenderPasswort: kalenderPasswort,
     t: t,
     lang: function () { return lang; },
     onLang: function (fn) { listeners.push(fn); },

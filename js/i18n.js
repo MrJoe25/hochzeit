@@ -59,6 +59,7 @@ window.I18N = {
     dress_text: '<strong>Jaquette ou costume</strong> pour les messieurs, <strong>tenue festive</strong> pour les dames.',
     cal_btn: 'Ajouter au calendrier',
     cal_google: 'ou dans Google Agenda',
+    rsvp_cal: 'Ajoutez dès maintenant la journée à votre calendrier, avec les horaires, les adresses et le mot de passe du site :',
     nav_infos: 'Infos',
     faq_eyebrow: 'Questions et réponses',
     faq_title: 'Bon à savoir',

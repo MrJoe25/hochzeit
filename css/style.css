@@ -233,6 +233,9 @@ body.map-open .nach-oben { display: none; }
 
 @media (max-width: 700px) { .hero .date .wtag { display: block; } }
 
+.rsvp-cal { text-align: center; margin: 28px 0 8px; padding-top: 22px; border-top: 1px solid var(--gold-line); }
+.rsvp-cal .cal-links { margin-top: 14px; }
+
 /* Fuß */
 footer { border-top: 1px solid var(--gold-line); padding: 44px 24px; text-align: center; }
 footer .names { margin: 0; font-family: var(--display); font-size: 26px; }
