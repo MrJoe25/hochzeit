@@ -5,18 +5,19 @@ CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT
 UID:hochzeit-aline-joachim-20270717@mrjoe25.github.io
-DTSTAMP:20261107T120000Z
+DTSTAMP:20261110T120000Z
 DTSTART:20270717T120000Z
 DTEND:20270718T000000Z
 SUMMARY:Hochzeit Aline & Joachim
 LOCATION:St. Albani Kirche\, Albanikirchhof 1A\, 37073 Göttingen
-DESCRIPTION:Programm\n14:00 Kirchliche Trauung\, St. Albani Kirche\, Alba
- nikirchhof 1A\, 37073 Göttingen\n15:00 Gratulation vor der Kirche\ndanac
- h Shuttle zum Kiessee\, Abfahrt Albaniplatz\n16:00 Empfang im Biergarten\
- , Kredo am Kiessee\, Sandweg 9a\, 37083 Göttingen\n18:00 Abendessen\n21:
- 00 Tanz und Feier bis 2 Uhr\, danach Shuttle zu den Hotels\n\nDresscode: 
- Cutaway oder Anzug\, für die Damen ein elegantes Kleid.\n\nAlle 
- Infos und Zu- oder Absage bis 1. Februar 2027:\nhttps://mrjoe25.github.io
+DESCRIPTION:Programm\n14:00 Kirchliche Trauung\, St. Albani Kirche\, Albani
+ kirchhof 1A\, 37073 Göttingen\n15:00 Fotos und Beisammensein vor der Kirc
+ he\nca. 15:30 Shuttle zum Kiessee\, Abfahrt Albaniplatz (in mehreren Fahrt
+ en)\n16:00 Empfang im Biergarten\, Kredo am Kiessee\, Sandweg 9a\, 37083 G
+ öttingen (das Brautpaar kommt gegen 16:30 dazu)\n18:00 Abendessen\n21:00 
+ Tanz und Feier bis 2 Uhr\, danach Shuttle zu den Hotels\n\nDresscode: Cuta
+ way oder Anzug für die Herren\, festliche Kleidung für die Damen.\n\nAll
+ e Infos und Zu- oder Absage bis 15. April 2027:\nhttps://mrjoe25.github.io
  /hochzeit/
 URL:https://mrjoe25.github.io/hochzeit/
 BEGIN:VALARM
