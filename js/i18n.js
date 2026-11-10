@@ -48,7 +48,7 @@ window.I18N = {
     taxi_text: 'Depuis les hôtels près de la gare, comptez environ 20 à 25 minutes à pied jusqu’à l’église en traversant la jolie vieille ville de Göttingen, ou environ 5 minutes en taxi.',
     taxi_uber: 'Uber est également disponible à Göttingen via l’application Uber.',
     park_label: 'P · En voiture ?',
-    park_text: 'Nous vous conseillons de laisser la voiture à l’hôtel. Il est difficile de se garer près du Kredo : le parking juste à côté est très petit et vite complet. Le parking du Jahnstadion offre davantage de places, à environ 15 minutes à pied du Kredo.',
+    park_text: 'Nous vous conseillons de laisser la voiture à l’hôtel. Il est difficile de se garer près du Kredo : le parking juste à côté est très petit et vite complet. Le parking du Jahnstadion offre davantage de places, à environ 15 minutes à pied du Kredo. Les tarifs indiqués ci-dessous sont donnés sans garantie.',
 
     hotel_eyebrow: 'Où dormir',
     hotel_title: 'Hébergement',
@@ -70,7 +70,7 @@ window.I18N = {
     faq_q3: 'Et s’il pleut ?',
     faq_a3: 'Le vin d’honneur a lieu au jardin, au bord du Kiessee. En cas de pluie, de grands parasols sont prévus et, si nécessaire, nous nous installerons à l’intérieur. Pour le jardin, privilégiez des talons larges, et prévoyez une veste légère ou une étole pour la soirée au bord de l’eau.',
     faq_q4: 'Puis-je prendre des photos ?',
-    faq_a4: 'Bien sûr. Une photographe professionnelle nous accompagne tout au long de la journée et nous partagerons ses photos avec vous après le mariage. Vous n’avez donc pas besoin de photographier vous-mêmes : profitez simplement de la fête.',
+    faq_a4: 'Pas dans l’église, s’il vous plaît : pendant la cérémonie, nous souhaitons qu’il n’y ait ni photos au téléphone ni appareils photo. Ensuite, bien volontiers. Une photographe professionnelle nous accompagne toute la journée et nous partagerons ses photos avec vous après le mariage.',
     faq_q5: 'L’église et la fête sont-elles accessibles ?',
     faq_a5: 'Oui. L’église St. Albani et le Kredo sont tous deux accessibles de plain-pied. Des places de stationnement pour personnes handicapées se trouvent sur l’Albaniplatz, juste à côté de l’église.',
     gift_eyebrow: 'Souhaits',
