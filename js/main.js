@@ -1,0 +1,536 @@
+(function () {
+  'use strict';
+
+  // Beim Laden und Neuladen immer oben starten, ohne #abschnitt in der Adresse
+  try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
+  if (location.hash) {
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+  }
+  window.scrollTo(0, 0);
+  var angefasst = false; // hat der Gast schon selbst gescrollt oder geklickt?
+  ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (t) {
+    window.addEventListener(t, function () { angefasst = true; }, { passive: true, once: true });
+  });
+  window.addEventListener('load', function () { if (!angefasst) window.scrollTo(0, 0); });
+
+  // Zu einem Abschnitt springen und so lange nachkorrigieren, bis er wirklich oben steht.
+  // (Nachladende Inhalte wie Hotels, Karte oder Schriften verschieben sonst das Ziel.)
+  var lauf = 0;
+  function zielY(el) {
+    var nav = document.querySelector('.nav');
+    var navH = nav && getComputedStyle(nav).position === 'sticky' ? nav.offsetHeight : 0;
+    return Math.max(0, Math.round(el.getBoundingClientRect().top + window.scrollY - navH - 8));
+  }
+  function springeZu(el) {
+    var meinLauf = ++lauf;
+    var abbruch = false;
+    function stopp() { abbruch = true; }
+    window.addEventListener('wheel', stopp, { passive: true, once: true });
+    window.addEventListener('touchmove', stopp, { passive: true, once: true });
+    window.scrollTo({ top: el ? zielY(el) : 0, behavior: 'smooth' });
+    if (!el) return;
+    var start = Date.now(), ruhig = 0, letztesY = -1;
+    (function pruefe() {
+      if (abbruch || meinLauf !== lauf) return;
+      var y = window.scrollY, soll = zielY(el);
+      var maxY = document.documentElement.scrollHeight - window.innerHeight;
+      if (y === letztesY) ruhig++; else ruhig = 0;
+      letztesY = y;
+      // Scrollen steht still, aber nicht am Ziel: nachkorrigieren
+      if (ruhig >= 3 && Math.abs(y - Math.min(soll, maxY)) > 2) {
+        window.scrollTo({ top: soll, behavior: Math.abs(y - soll) > 300 ? 'smooth' : 'auto' });
+        ruhig = 0;
+      }
+      if (Date.now() - start < 2500) setTimeout(pruefe, 80);
+    })();
+  }
+
+  // Interne Links scrollen weich, ohne die Adresse zu ändern
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href^="#"]');
+    if (!a || a.closest('.leaflet-container')) return; // Kartenknöpfe (z. B. Schließen-X) nicht anfassen
+    var id = a.getAttribute('href').slice(1);
+    var ziel = id === 'start' || !id ? null : document.getElementById(id);
+    if (id && id !== 'start' && !ziel) return;
+    e.preventDefault();
+    springeZu(ziel);
+  });
+
+  // ---------- Sprache ----------
+  var GCAL = {"de": "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Hochzeit%20Aline%20%26%20Joachim&dates=20270717T120000Z%2F20270718T000000Z&location=St.%20Albani%20Kirche%2C%20Albanikirchhof%201A%2C%2037073%20G%C3%B6ttingen&details=PROGRAMM%0A%0A14.00%20%20Kirchliche%20Trauung%0ASt.%20Albani%20Kirche%2C%20Albanikirchhof%201A%2C%2037073%20G%C3%B6ttingen%0A%0A15.00%20%20Fotos%20und%20Beisammensein%20vor%20der%20Kirche%0A%0Aca.%2015.30%20%20Shuttle%20zum%20Kiessee%0AAbfahrt%20am%20Albaniplatz%2C%20in%20mehreren%20Fahrten%0A%0A16.00%20%20Empfang%20im%20Biergarten%0AKredo%20am%20Kiessee%2C%20Sandweg%209a%2C%2037083%20G%C3%B6ttingen%0ADas%20Brautpaar%20kommt%20gegen%2016.30%20dazu.%0A%0A18.00%20%20Abendessen%0A%0A21.00%20%20Tanz%20und%20Feier%20bis%202%20Uhr%0ADanach%20Shuttle%20zu%20den%20Hotels%0A%0A%0ADRESSCODE%0ACutaway%20oder%20Anzug%20f%C3%BCr%20die%20Herren%2C%20festliche%20Kleidung%20f%C3%BCr%20die%20Damen%0A%0A%0AMIT%20DEM%20AUTO%0AAm%20Kredo%20gibt%20es%20kaum%20Parkpl%C3%A4tze.%20Mehr%20Platz%20am%20Parkplatz%20Jahnstadion%2C%20Sandweg%205%2C%20ca.%2015%20Min.%20zu%20Fu%C3%9F%20zum%20Kredo.%20Alle%20Parkpl%C3%A4tze%20sind%20kostenpflichtig.%0A%0A%0ANAVIGATION%20%28Google%20Maps%29%0AKirche%3A%20https%3A%2F%2Fwww.google.com%2Fmaps%2Fdir%2F%3Fapi%3D1%26destination%3D51.53372%252C9.94117%0AShuttle%20am%20Albaniplatz%3A%20https%3A%2F%2Fwww.google.com%2Fmaps%2Fdir%2F%3Fapi%3D1%26destination%3D51.53402%252C9.94175%0AKredo%20am%20Kiessee%3A%20https%3A%2F%2Fwww.google.com%2Fmaps%2Fdir%2F%3Fapi%3D1%26destination%3D51.51993%252C9.92011%0AParkplatz%20Jahnstadion%3A%20https%3A%2F%2Fwww.google.com%2Fmaps%2Fdir%2F%3Fapi%3D1%26destination%3D51.51994%252C9.92864%0A%0A%0AWEBSITE%20MIT%20ALLEN%20INFOS%0Ahttps%3A%2F%2Fmrjoe25.github.io%2Fhochzeit%2F%0APasswort%3A%20steht%20auf%20Eurer%20Einladung%0AZu-%20oder%20Absage%20bis%20zum%2015.%20April%202027&ctz=Europe%2FBerlin", "fr": "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Mariage%20Aline%20%26%20Joachim&dates=20270717T120000Z%2F20270718T000000Z&location=%C3%89glise%20Saint-Alban%20%28St.%20Albani%20Kirche%29%2C%20Albanikirchhof%201A%2C%2037073%20G%C3%B6ttingen&details=PROGRAMME%0A%0A14%20h%20%20C%C3%A9r%C3%A9monie%20religieuse%0A%C3%89glise%20Saint-Alban%20%28St.%20Albani%20Kirche%29%2C%20Albanikirchhof%201A%2C%2037073%20G%C3%B6ttingen%0A%0A15%20h%20%20Photos%20et%20moments%20partag%C3%A9s%20devant%20l%E2%80%99%C3%A9glise%0A%0Avers%2015%20h%2030%20%20Navette%20vers%20le%20Kiessee%0AD%C3%A9part%20Albaniplatz%2C%20en%20plusieurs%20rotations%0A%0A16%20h%20%20R%C3%A9ception%20dans%20le%20jardin%20du%20Kredo%0AKredo%20am%20Kiessee%2C%20Sandweg%209a%2C%2037083%20G%C3%B6ttingen%0ALes%20mari%C3%A9s%20vous%20rejoignent%20vers%2016%20h%2030.%0A%0A18%20h%20%20D%C3%AEner%0A%0A21%20h%20%20Soir%C3%A9e%20dansante%20jusqu%E2%80%99%C3%A0%202%20heures%0APuis%20navette%20vers%20les%20h%C3%B4tels%0A%0A%0ATENUE%20SOUHAIT%C3%89E%0AJaquette%20ou%20costume%20pour%20les%20messieurs%2C%20tenue%20festive%20pour%20les%20dames%0A%0A%0AEN%20VOITURE%0APeu%20de%20places%20pr%C3%A8s%20du%20Kredo.%20Davantage%20de%20places%20au%20parking%20du%20Jahnstadion%2C%20Sandweg%205%2C%20env.%2015%20min%20%C3%A0%20pied%20jusqu%E2%80%99au%20Kredo.%20Tous%20les%20parkings%20sont%20payants.%0A%0A%0AITIN%C3%89RAIRES%20%28Google%20Maps%29%0A%C3%89glise%20Saint-Alban%20%3A%20https%3A%2F%2Fwww.google.com%2Fmaps%2Fdir%2F%3Fapi%3D1%26destination%3D51.53372%252C9.94117%0ANavette%2C%20Albaniplatz%20%3A%20https%3A%2F%2Fwww.google.com%2Fmaps%2Fdir%2F%3Fapi%3D1%26destination%3D51.53402%252C9.94175%0AKredo%20am%20Kiessee%20%3A%20https%3A%2F%2Fwww.google.com%2Fmaps%2Fdir%2F%3Fapi%3D1%26destination%3D51.51993%252C9.92011%0AParking%20du%20Jahnstadion%20%3A%20https%3A%2F%2Fwww.google.com%2Fmaps%2Fdir%2F%3Fapi%3D1%26destination%3D51.51994%252C9.92864%0A%0A%0ASITE%20AVEC%20TOUTES%20LES%20INFORMATIONS%0Ahttps%3A%2F%2Fmrjoe25.github.io%2Fhochzeit%2F%0AMot%20de%20passe%20%3A%20indiqu%C3%A9%20sur%20votre%20invitation%0AR%C3%A9ponse%20souhait%C3%A9e%20avant%20le%2015%20avril%202027&ctz=Europe%2FBerlin"};
+  var istAndroid = /android/i.test(navigator.userAgent);
+  if (istAndroid) document.documentElement.classList.add('is-android');
+  var deTexte = {}; // deutsche Originaltexte aus index.html
+  var lang = 'de';
+  var listeners = [];
+
+  function speichern(key, val) { try { localStorage.setItem(key, val); } catch (e) {} }
+  function laden(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
+
+  function startSprache() {
+    var p = new URLSearchParams(location.search).get('lang');
+    if (p === 'de' || p === 'fr') return p;
+    var s = laden('hochzeit-lang');
+    if (s === 'de' || s === 'fr') return s;
+    return (navigator.language || '').toLowerCase().indexOf('fr') === 0 ? 'fr' : 'de';
+  }
+
+  function t(key) {
+    var d = window.I18N.js[lang] || window.I18N.js.de;
+    return d[key] != null ? d[key] : window.I18N.js.de[key];
+  }
+
+  function setzeSprache(neu) {
+    lang = neu;
+    document.documentElement.lang = neu;
+    var fr = window.I18N.fr;
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var k = el.getAttribute('data-i18n');
+      if (!(k in deTexte)) deTexte[k] = el.innerHTML;
+      el.innerHTML = neu === 'fr' && fr[k] ? fr[k] : deTexte[k];
+    });
+    document.querySelectorAll('[data-i18n-alt]').forEach(function (el) {
+      var k = 'alt:' + el.getAttribute('data-i18n-alt');
+      if (!(k in deTexte)) deTexte[k] = el.getAttribute('alt');
+      el.setAttribute('alt', neu === 'fr' && fr[el.getAttribute('data-i18n-alt')] ? fr[el.getAttribute('data-i18n-alt')] : deTexte[k]);
+    });
+    document.querySelectorAll('[data-i18n-aria]').forEach(function (el) {
+      var k = 'aria:' + el.getAttribute('data-i18n-aria');
+      if (!(k in deTexte)) deTexte[k] = el.getAttribute('aria-label');
+      el.setAttribute('aria-label', neu === 'fr' && fr[el.getAttribute('data-i18n-aria')] ? fr[el.getAttribute('data-i18n-aria')] : deTexte[k]);
+    });
+    document.querySelectorAll('.lang button').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.getAttribute('data-lang') === neu ? 'true' : 'false');
+    });
+    document.title = neu === 'fr' ? 'Aline & Joachim · 17 juillet 2027' : 'Aline & Joachim · 17. Juli 2027';
+    kalenderLinks(neu);
+    elternZeigen();
+    privatZeigen();
+    speichern('hochzeit-lang', neu);
+    listeners.forEach(function (fn) { fn(neu); });
+  }
+
+  // Kalender: Das Passwort steht nur in Einträgen von Gästen, die es auf der Website schon richtig eingegeben haben.
+  // Die öffentlichen Dateien enthalten nur den Hinweis auf die Einladung.
+  var kalPw = null, icsBlob = {};
+  var PW_HINWEIS = { de: 'Passwort: steht auf Eurer Einladung', fr: 'Mot de passe : indiqué sur votre invitation' };
+  var PW_TEXT = { de: 'Passwort: ', fr: 'Mot de passe : ' };
+  function gcalLink(l) {
+    var g = GCAL[l] || GCAL.de;
+    return kalPw ? g.replace(encodeURIComponent(PW_HINWEIS[l]), encodeURIComponent(PW_TEXT[l] + kalPw)) : g;
+  }
+  function kalenderLinks(l) {
+    document.querySelectorAll('.cal-ics').forEach(function (a) {
+      // Android: Google Kalender direkt, sonst .ics (iPhone, Mac, Outlook)
+      if (istAndroid) { a.href = gcalLink(l); a.removeAttribute('download'); a.target = '_blank'; a.rel = 'noopener'; }
+      else if (kalPw && icsBlob[l]) { a.href = icsBlob[l]; a.setAttribute('download', 'hochzeit-aline-joachim.ics'); }
+      else { a.href = 'kalender/hochzeit-aline-joachim-' + l + '.ics'; a.setAttribute('download', ''); }
+    });
+    document.querySelectorAll('.cal-g').forEach(function (a) { a.href = gcalLink(l); });
+  }
+  function kalenderPasswort(pw) {
+    pw = String(pw || '').trim();
+    if (!pw || pw === kalPw) return;
+    kalPw = pw;
+    kalenderLinks(lang);
+    if (istAndroid || !window.fetch || !window.Blob || !window.URL) return;
+    ['de', 'fr'].forEach(function (l) {
+      fetch('kalender/hochzeit-aline-joachim-' + l + '.ics').then(function (r) { return r.text(); }).then(function (txt) {
+        var ics = txt.replace(/\r\n[ \t]/g, '');
+        var sicher = pw.replace(/\\/g, '\\\\').replace(/,/g, '\\,').replace(/;/g, '\\;');
+        ics = ics.replace(PW_HINWEIS[l], PW_TEXT[l] + sicher);
+        if (icsBlob[l]) URL.revokeObjectURL(icsBlob[l]);
+        icsBlob[l] = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
+        kalenderLinks(lang);
+      }).catch(function () {});
+    });
+  }
+
+  // Kontaktdaten der Eltern: kommen erst nach richtigem Passwort vom Google-Skript
+  var eltern = null;
+  function elternZeigen() {
+    var box = document.getElementById('eltern-kontakt');
+    if (!box || !eltern || !eltern.length) return;
+    box.innerHTML = eltern.map(function (e) {
+      var titel = lang === 'fr'
+        ? (/^[aeiouh]/i.test(e.von) ? 'Parents d’' : 'Parents de ') + e.von
+        : t('eltern_von').replace('{name}', e.von);
+      var adr = (e.adresse || []).concat([(e.land && (e.land[lang] || e.land.de)) || '']).filter(Boolean).map(esc).join('<br>');
+      var mails = (e.mails || []).map(function (m) {
+        return '<span class="eltern-mail">' + esc(m[0]) + '<br><a href="mailto:' + esc(m[1]) + '">' + esc(m[1]) + '</a></span>';
+      }).join('');
+      return '<div class="eltern-karte"><p class="label">' + esc(titel) + '</p><p><strong>' + esc((e.namen && (e.namen[lang] || e.namen.de)) || '') + '</strong><br>' + adr + '</p><p class="small">' + mails + '</p></div>';
+    }).join('');
+    box.hidden = false;
+    var h = document.getElementById('eltern-hinweis');
+    if (h) h.hidden = true;
+  }
+  function zeigeEltern(liste) { if (Array.isArray(liste)) { eltern = liste; elternZeigen(); } }
+
+  // Geschützte Angaben (Kontodaten, Trauzeugen-Kontakte, Postadresse): kommen erst nach richtigem Passwort vom Google-Skript
+  var privat = null;
+  function privatZeigen() {
+    if (!privat) return;
+    var bank = document.getElementById('bank');
+    if (bank && privat.bank) {
+      var b = privat.bank;
+      bank.innerHTML =
+        '<p><span class="label">' + esc(t('bank_owner')) + '</span><br>' + esc(b.inhaber) + '</p>' +
+        '<p><span class="label">IBAN</span><br><span class="mono">' + esc(b.iban) + '</span><button type="button" class="copy" data-copy="' + esc(String(b.iban).replace(/\s+/g, '')) + '">' + esc(t('copy_btn')) + '</button></p>' +
+        '<p><span class="label">BIC</span><br><span class="mono">' + esc(b.bic) + '</span></p>';
+      bank.hidden = false;
+    }
+    document.querySelectorAll('.tz-kontakt').forEach(function (el) {
+      var k = privat.trauzeugen && privat.trauzeugen[el.getAttribute('data-tz')];
+      if (!k) return;
+      el.innerHTML = '<a href="mailto:' + esc(k.mail) + '">' + esc(k.mail) + '</a><br><a href="tel:' + esc(String(k.tel).replace(/[^+\d]/g, '')) + '">' + esc(k.tel) + '</a>';
+      el.hidden = false;
+    });
+    var post = document.getElementById('post-adresse');
+    if (post && privat.post) { document.getElementById('post-text').textContent = privat.post; post.hidden = false; }
+    document.querySelectorAll('.geschuetzt').forEach(function (el) { el.hidden = true; });
+  }
+  function zeigePrivat(daten) { if (daten && typeof daten === 'object') { privat = daten; privatZeigen(); } }
+
+  window.APP = {
+    springeZu: springeZu,
+    kalenderPasswort: kalenderPasswort,
+    zeigeEltern: zeigeEltern,
+    zeigePrivat: zeigePrivat,
+    t: t,
+    lang: function () { return lang; },
+    onLang: function (fn) { listeners.push(fn); },
+  };
+
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.addEventListener('click', function () { setzeSprache(b.getAttribute('data-lang')); });
+  });
+
+  // ---------- Kopieren (IBAN) ----------
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-copy]');
+    if (!b) return;
+    var text = b.getAttribute('data-copy');
+    var fertig = function () { var alt = b.textContent; b.textContent = t('copied'); setTimeout(function () { b.textContent = alt; }, 1600); };
+    if (navigator.clipboard) navigator.clipboard.writeText(text).then(fertig, function () {});
+  });
+
+  // ---------- Orte ----------
+  // Ersatzdaten, falls das Google Skript (noch) nicht erreichbar ist. Koordinaten ungefähr.
+  var ERSATZ = [
+    { punkt: '1', typ: 'Station', name: 'St. Albani Kirche', adresse: 'Albanikirchhof 1A, 37073 Göttingen', uhrzeit: '14.00', hinweis: 'Kirchliche Trauung, danach Fotos und Beisammensein vor der Kirche', hinweisFr: 'Cérémonie religieuse, puis photos et moments partagés devant l’église', lat: 51.5337, lng: 9.9411 },
+    { punkt: '2', typ: 'Station', name: 'Kredo am Kiessee', adresse: 'Sandweg 9a, 37083 Göttingen', uhrzeit: 'ab 16.00', hinweis: 'Empfang im Biergarten, Abendessen und Feier', hinweisFr: 'Réception dans le jardin, dîner et soirée dansante', lat: 51.51993, lng: 9.92011 },
+    { punkt: 'P1', typ: 'Parken', name: 'Parken an der Kirche', adresse: 'Albanipl. 1, 37073 Göttingen', lat: 51.5334, lng: 9.9398 },
+    { punkt: 'P2', typ: 'Parken', name: 'Parkplatz am Kiessee', adresse: 'Sandweg 15, 37083 Göttingen', hinweis: 'Direkt am Kredo, aber sehr klein und schnell voll.', hinweisFr: 'Juste à côté du Kredo, mais très petit et vite complet.', lat: 51.51914, lng: 9.91939 },
+    { punkt: 'P3', typ: 'Parken', name: 'Parkplatz Jahnstadion', adresse: 'Sandweg 5, 37083 Göttingen', hinweis: 'Mehr Plätze, ca. 15 Min. zu Fuß zum Kredo.', hinweisFr: 'Davantage de places, env. 15 min à pied jusqu’au Kredo.', lat: 51.51994, lng: 9.92864 },
+    { punkt: 'S1', typ: 'Shuttle', name: 'Shuttle Abfahrt', adresse: 'Albanipl. 1, 37073 Göttingen', lat: 51.5334, lng: 9.9398 },
+    { punkt: 'H1', typ: 'Hotel', name: 'Hotel FREIgeist Göttingen Innenstadt', adresse: 'Berliner Str. 30, 37073 Göttingen', lat: 51.5370, lng: 9.9395 },
+    { punkt: 'H2', typ: 'Hotel', name: 'Gebhards Hotel', adresse: 'Goethe-Allee 22-23, 37073 Göttingen', lat: 51.5352, lng: 9.9290 },
+    { punkt: 'H3', typ: 'Hotel', name: 'Hotel Stadt Hannover', adresse: 'Goethe-Allee 21, 37073 Göttingen', lat: 51.5349, lng: 9.9297 },
+  ];
+
+  var orte = ERSATZ;
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function key(o) { return String(o.punkt || '') + '|' + String(o.name || ''); }
+  function typ(o) { return String(o.typ || '').toLowerCase(); }
+  function hinweis(o) { return lang === 'fr' ? (o.hinweisFr || '') : (o.hinweis || ''); }
+  // Uhrzeiten wie auf der Einladung: deutsch 14.00, französisch 14 h / 15 h 30
+  function zeit(o) {
+    var z = String(o.uhrzeit || '');
+    if (lang === 'fr') {
+      return z.replace(/^ab\s+/i, t('ab') + ' ').replace(/(\d{1,2})[.:](\d{2})/g, function (m, h, mi) { return h + ' h' + (mi === '00' ? '' : ' ' + mi); });
+    }
+    return z.replace(/(\d{1,2}):(\d{2})/g, '$1.$2');
+  }
+  // Namen der Orte auf Französisch wie auf der Einladung
+  var NAMEN_FR = {
+    'St. Albani Kirche': 'Église Saint-Alban',
+    'Parken an der Kirche': 'Parking de l’église',
+    'Parkplatz am Kiessee': 'Parking du Kiessee',
+    'Parkplatz Jahnstadion': 'Parking du Jahnstadion',
+    'Shuttle Abfahrt': 'Départ de la navette'
+  };
+  function nm(o) { var n = String(o.name || ''); return lang === 'fr' && NAMEN_FR[n] ? NAMEN_FR[n] : n; }
+  function route(o) {
+    var ziel = o.genau && o.lat && o.lng ? o.lat + ',' + o.lng : (o.adresse || o.name);
+    return 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(ziel);
+  }
+  function link(o) {
+    var l = String(o.link || '').trim();
+    if (!l) return '';
+    if (!/^https?:\/\//i.test(l)) l = 'https://' + l;
+    return l;
+  }
+
+  function zeichneListen() {
+    var stationen = orte.filter(function (o) { return typ(o) === 'station' || typ(o) === 'shuttle'; });
+    document.getElementById('orte-liste').innerHTML = stationen.map(function (o) {
+      var kopf = esc(o.punkt) + (o.uhrzeit ? ' · ' + esc(zeit(o)) : '');
+      if (typ(o) === 'shuttle') kopf = esc(o.punkt.charAt(0)) + ' · ' + esc(t('shuttle'));
+      var text = typ(o) === 'shuttle' ? (hinweis(o) || t('shuttle_text')) : hinweis(o);
+      return '<div class="card klickbar" data-ort="' + esc(key(o)) + '"><p class="label">' + kopf + '</p>' +
+        '<p class="title"><button type="button" class="ort-btn">' + esc(nm(o)) + '</button></p>' +
+        '<p>' + esc(o.adresse) + '</p>' +
+        (text ? '<p class="small" style="margin-top:6px">' + esc(text) + '</p>' : '') +
+        '<a class="textlink" target="_blank" rel="noopener" href="' + esc(route(o)) + '">' + esc(t('route')) + ' →</a></div>';
+    }).join('');
+
+    document.getElementById('park-liste').innerHTML = orte.filter(function (o) { return typ(o) === 'parken'; }).map(function (o) {
+      return '<li data-ort="' + esc(key(o)) + '"><button type="button" class="ort-btn ort-inline">' + esc(nm(o)) + '</button>, ' + esc(String(o.adresse || '').replace(/,\s*\d{5}.*$/, '')) + ' · <a target="_blank" rel="noopener" href="' + esc(route(o)) + '">' + esc(t('route_kurz')) + '</a>' + (hinweis(o) ? '<br><span class="small">' + esc(hinweis(o)) + '</span>' : '') + '</li>';
+    }).join('');
+
+    document.getElementById('hotel-liste').innerHTML = orte.filter(function (o) { return typ(o) === 'hotel'; }).map(function (o) {
+      var l = link(o);
+      return '<div class="tile klickbar" data-ort="' + esc(key(o)) + '"><p class="label">' + esc(o.punkt) + '</p>' +
+        '<p class="title"><button type="button" class="ort-btn">' + esc(nm(o)) + '</button></p>' +
+        '<p>' + esc(String(o.adresse || '').replace(/,\s*\d{5}.*$/, '')) + '</p>' +
+        (hinweis(o) ? '<p class="small">' + esc(hinweis(o)) + '</p>' : '') +
+        '<a class="textlink" target="_blank" rel="noopener" href="' + esc(route(o)) + '">' + esc(t('route')) + ' →</a>' +
+        (l ? ' &nbsp; <a class="textlink" target="_blank" rel="noopener" href="' + esc(l) + '">' + esc(t('website')) + ' →</a>' : '') +
+        '</div>';
+    }).join('');
+  }
+
+  // ---------- Karte ----------
+  var karte = null, ebene = null, marker = {};
+
+  // Klick auf einen Ort in der Liste: Karte darauf zentrieren
+  function zeigeAufKarte(k) {
+    var m = marker[k];
+    if (!m || !karte) return;
+    var box = document.querySelector('.map-box');
+    var r = box.getBoundingClientRect();
+    var sichtbar = r.top >= 0 && r.top < window.innerHeight * 0.5;
+    var los = function () {
+      karte.flyTo(m.getLatLng(), Math.max(karte.getZoom(), 16), { duration: 0.8 });
+      karte.once('moveend', function () { m.openPopup(); });
+    };
+    if (sichtbar || box.classList.contains('is-full')) los();
+    else { box.scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(los, 450); }
+  }
+  document.addEventListener('click', function (e) {
+    var p = e.target.closest('[data-punkt]');
+    if (p) {
+      var k = Object.keys(marker).filter(function (x) { return x.split('|')[0] === p.getAttribute('data-punkt'); })[0];
+      if (k) zeigeAufKarte(k);
+      return;
+    }
+    var el = e.target.closest('[data-ort]');
+    if (!el || e.target.closest('a')) return;
+    zeigeAufKarte(el.getAttribute('data-ort'));
+  });
+
+  function pin(o) {
+    var ty = typ(o);
+    var cls = { station: 'pin-station', shuttle: 'pin-shuttle', hotel: 'pin-hotel', parken: 'pin-parken' }[ty] || 'pin-station';
+    var size = { station: [34, 34], shuttle: [30, 30], hotel: [38, 28], parken: [24, 24] }[ty] || [34, 34];
+    var label = ty === 'parken' ? 'P' : ty === 'shuttle' ? 'S' : o.punkt;
+    return L.divIcon({ className: '', html: '<div class="pin ' + cls + '">' + esc(label) + '</div>', iconSize: size, iconAnchor: [size[0] / 2, size[1] / 2] });
+  }
+
+  function zeichneKarte() {
+    if (!window.L) return;
+    if (!karte) {
+      var touch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+      // Auf Handy/Tablet: Karte im Normalmodus nicht mit einem Finger verschieben, damit die Seite gut scrollt
+      karte = L.map('map', { scrollWheelZoom: true, dragging: !touch });
+      karte._touchModus = touch;
+      vollbildKnopf();
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      }).addTo(karte);
+      ebene = L.layerGroup().addTo(karte);
+    }
+    ebene.clearLayers();
+    marker = {};
+    var belegt = {};
+    var punkte = [];
+    var reihenfolge = { parken: 0, hotel: 1, shuttle: 2, station: 3 };
+    orte.filter(function (o) { return o.lat && o.lng; })
+      .sort(function (a, b) { return (reihenfolge[typ(a)] || 0) - (reihenfolge[typ(b)] || 0); })
+      .forEach(function (o) {
+        var lat = Number(o.lat), lng = Number(o.lng);
+        var pos = lat.toFixed(4) + ',' + lng.toFixed(4);
+        if (belegt[pos]) lng += 0.0005 * belegt[pos]; // gleiche Adresse leicht versetzen
+        belegt[pos] = (belegt[pos] || 0) + 1;
+        var text = typ(o) === 'shuttle' ? (hinweis(o) || t('shuttle_text')) : hinweis(o);
+        var html = '<p class="popup-title">' + esc(nm(o)) + '</p>' +
+          (o.uhrzeit ? '<p>' + esc(zeit(o)) + '</p>' : '') +
+          '<p>' + esc(o.adresse) + '</p>' +
+          (text ? '<p>' + esc(text) + '</p>' : '') +
+          '<a class="textlink" target="_blank" rel="noopener" href="' + esc(route(o)) + '">' + esc(t('route')) + ' →</a>';
+        marker[key(o)] = L.marker([lat, lng], { icon: pin(o), title: o.name, zIndexOffset: (reihenfolge[typ(o)] || 0) * 100, keyboard: true })
+          .bindPopup(html).addTo(ebene);
+        if (typ(o) !== 'parken') punkte.push([lat, lng]);
+      });
+    letztePunkte = punkte;
+    if (punkte.length) karte.fitBounds(punkte, { padding: [40, 40], maxZoom: 15 });
+  }
+  var letztePunkte = [];
+  window.addEventListener('load', function () {
+    if (!karte) return;
+    karte.invalidateSize();
+    if (letztePunkte.length) karte.fitBounds(letztePunkte, { padding: [40, 40], maxZoom: 15 });
+  });
+
+  // ---------- Vollbild ----------
+  function vollbildKnopf() {
+    var box = document.querySelector('.map-box');
+    var Knopf = L.Control.extend({
+      options: { position: 'topright' },
+      onAdd: function () {
+        var b = L.DomUtil.create('button', 'map-full');
+        b.type = 'button';
+        b.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path class="auf" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><path class="zu" d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>';
+        L.DomEvent.disableClickPropagation(b);
+        L.DomEvent.on(b, 'click', function () { umschalten(); });
+        knopfEl = b;
+        beschrifte();
+        return b;
+      },
+    });
+    var knopfEl = null;
+    function beschrifte() {
+      if (!knopfEl) return;
+      var an = box.classList.contains('is-full');
+      var txt = lang === 'fr' ? (an ? 'Quitter le plein écran' : 'Plein écran') : (an ? 'Vollbild beenden' : 'Vollbild');
+      knopfEl.setAttribute('aria-label', txt);
+      knopfEl.title = txt;
+      knopfEl.setAttribute('aria-pressed', an ? 'true' : 'false');
+      if (hinweisEl) hinweisEl.textContent = lang === 'fr' ? '↔ Plein écran pour déplacer la carte' : '↔ Vollbild, um die Karte zu verschieben';
+    }
+    var hinweisEl = null;
+    if (karte._touchModus) {
+      hinweisEl = document.createElement('button');
+      hinweisEl.type = 'button';
+      hinweisEl.className = 'map-hinweis';
+      box.classList.add('mit-hinweis');
+      hinweisEl.addEventListener('click', function () { umschalten(); });
+      box.appendChild(hinweisEl);
+    }
+    var gemerkt = 0;
+    function umschalten(aus) {
+      var an = aus ? false : !box.classList.contains('is-full');
+      if (an === box.classList.contains('is-full')) return;
+      if (an) gemerkt = window.scrollY;
+      box.classList.toggle('is-full', an);
+      if (karte._touchModus) { if (an) karte.dragging.enable(); else karte.dragging.disable(); }
+      document.body.classList.toggle('map-open', an);
+      if (!an) window.scrollTo({ top: gemerkt, behavior: 'instant' }); // zurück an dieselbe Stelle der Seite
+      beschrifte();
+      setTimeout(function () { karte.invalidateSize(); if (!an) window.scrollTo({ top: gemerkt, behavior: 'instant' }); }, 50);
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && box.classList.contains('is-full')) umschalten(true);
+    });
+    window.APP.onLang(beschrifte);
+    new Knopf().addTo(karte);
+  }
+
+  function zeichneAlles() { zeichneListen(); zeichneKarte(); }
+
+  function ladeOrte() {
+    var api = (window.HOCHZEIT && window.HOCHZEIT.apiUrl) || '';
+    if (!api) return;
+    fetch(api + '?action=orte')
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.ok && d.orte && d.orte.length) {
+          // fehlende Koordinaten aus den Ersatzdaten übernehmen
+          d.orte.forEach(function (o) {
+            if (!o.lat) { var e = ERSATZ.filter(function (x) { return x.adresse === o.adresse; })[0]; if (e) { o.lat = e.lat; o.lng = e.lng; } }
+          });
+          orte = d.orte;
+          zeichneAlles();
+        }
+      })
+      .catch(function () {});
+  }
+
+  window.APP.onLang(function () { zeichneAlles(); });
+  setzeSprache(startSprache());
+  ladeOrte();
+})();
+
+// ---------- Führung: aktueller Abschnitt im Menü, Knopf nach oben, Sprungziele unter dem Menü ----------
+(function () {
+  'use strict';
+  var nav = document.querySelector('.nav');
+  var oben = document.getElementById('nach-oben');
+  var links = Array.prototype.slice.call(document.querySelectorAll('.nav-links a[href^="#"]'));
+  var abschnitte = links.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); }).filter(Boolean);
+
+  function navHoehe() {
+    var h = getComputedStyle(nav).position === 'sticky' ? nav.offsetHeight : 0;
+    document.documentElement.style.setProperty('--nav-h', h + 'px');
+    return h;
+  }
+  var nh = navHoehe();
+  window.addEventListener('resize', function () { nh = navHoehe(); });
+
+  var gewaehlt = null; // zuletzt im Menü angeklickt
+  links.forEach(function (a) { a.addEventListener('click', function () { gewaehlt = a.getAttribute('href').slice(1); }); });
+  var tick = false;
+  function aktualisieren() {
+    tick = false;
+    var y = window.scrollY;
+    // Knopf nach oben: erst nach etwas Scrollen, nicht über dem Antwortformular auf dem Handy
+    var rsvp = document.getElementById('rueckmeldung').getBoundingClientRect();
+    var imFormular = window.innerWidth <= 700 && rsvp.top < window.innerHeight && rsvp.bottom > 0;
+    var tippt = document.activeElement && /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName);
+    if (oben) oben.hidden = y < 700 || imFormular || tippt;
+    // Abschnitt, dessen Oberkante zuletzt unter dem Menü durchgelaufen ist
+    var aktiv = null, grenze = nh + window.innerHeight * 0.3;
+    var aktivOben = -Infinity;
+    abschnitte.forEach(function (s) {
+      var t = s.getBoundingClientRect().top; // nebeneinander liegende Abschnitte (Dresscode | Geschenke): den ersten nehmen
+      if (t <= grenze && t > aktivOben + 1) { aktiv = s; aktivOben = t; }
+    });
+    var g = gewaehlt && document.getElementById(gewaehlt);
+    if (g && aktiv && Math.abs(g.getBoundingClientRect().top - aktivOben) <= 1) aktiv = g;
+    if (window.innerHeight + y >= document.documentElement.scrollHeight - 4) aktiv = abschnitte[abschnitte.length - 1];
+    links.forEach(function (a) {
+      var an = aktiv && a.getAttribute('href') === '#' + aktiv.id;
+      a.classList.toggle('is-aktiv', !!an);
+      if (an) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+    });
+  }
+  document.addEventListener('focusin', function () { requestAnimationFrame(aktualisieren); });
+  document.addEventListener('focusout', function () { setTimeout(aktualisieren, 50); });
+  window.addEventListener('scroll', function () { if (!tick) { tick = true; requestAnimationFrame(aktualisieren); } }, { passive: true });
+  aktualisieren();
+})();
+
+// ---------- Seitenmenü auf dem Handy ----------
+(function () {
+  'use strict';
+  var nav = document.querySelector('.nav');
+  var knopf = document.getElementById('menu-btn');
+  var zu = document.getElementById('menu-zu');
+  var schatten = document.getElementById('nav-schatten');
+  var panel = document.getElementById('nav-panel');
+  function setze(an, fokusZurueck) {
+    nav.classList.toggle('is-offen', an);
+    document.body.classList.toggle('menu-offen', an);
+    schatten.hidden = !an;
+    knopf.setAttribute('aria-expanded', an ? 'true' : 'false');
+    if (an) { var erster = panel.querySelector('.nav-links a'); setTimeout(function () { erster.focus(); }, 60); }
+    else if (fokusZurueck) knopf.focus();
+  }
+  knopf.addEventListener('click', function () { setze(!nav.classList.contains('is-offen')); });
+  zu.addEventListener('click', function () { setze(false, true); });
+  schatten.addEventListener('click', function () { setze(false, true); });
+  panel.querySelectorAll('.nav-links a').forEach(function (a) {
+    a.addEventListener('click', function () { if (nav.classList.contains('is-offen')) setze(false); });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && nav.classList.contains('is-offen')) setze(false, true);
+  });
+  window.matchMedia('(min-width: 701px)').addEventListener('change', function (m) { if (m.matches) setze(false); });
+})();
