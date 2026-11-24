@@ -251,6 +251,9 @@ body.map-open .nach-oben { display: none; }
 .skizzen figcaption { margin-top: 10px; font-family: var(--sans); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-text); }
 @media (max-width: 700px) { .skizzen { gap: 16px; margin-top: 28px; } .skizzen figcaption { font-size: 11px; letter-spacing: 0.14em; } }
 
+.tz-foto { display: block; width: 150px; height: 150px; margin: 0 auto 18px; border-radius: 50%; object-fit: cover; border: 1px solid var(--gold); padding: 4px; background: var(--ivory); }
+@media (max-width: 700px) { .tz-foto { width: 128px; height: 128px; } }
+
 [hidden] { display: none !important; }
 
 /* Fuß */
